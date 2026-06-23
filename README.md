@@ -1,25 +1,33 @@
-# Tecno Store — Sistema de Gestión y Punto de Venta
+# Tecno Store — Retail Management System
 
 Sistema integral de gestión y Punto de Venta (POS) para comercios minoristas de productos tecnológicos.
 
 ## Descripción
 
-**Tecno Store** es una aplicación de escritorio diseñada para centralizar, controlar y optimizar los flujos comerciales y logísticos de una tienda tecnológica. Desarrollada como Trabajo Práctico Integrador para las asignaturas **Técnicas de Programación** y **Administración y Gestión de Bases de Datos** del **IFTS N.º 16**.
+Tecno Store es una aplicación de escritorio para la gestión integral de comercios minoristas, desarrollada en Python, Tkinter y MySQL.
 
-El proyecto fue diseñado utilizando una estricta **arquitectura por capas** para separar la lógica de negocio, el acceso a persistencia (BBDD) y la interfaz gráfica, garantizando escalabilidad y un código limpio.
+El sistema integra ventas, compras, inventario, administración de usuarios y reportes gerenciales en una única plataforma, implementando una arquitectura multicapa que separa la interfaz, la lógica de negocio y el acceso a datos.
+
+>Este proyecto comenzó como un desafío académico y continúa evolucionando como proyecto personal, incorporando mejoras de arquitectura, usabilidad y mantenibilidad.
+
+
 <p align="center">
   <img src="images/captura.jpeg" alt="Pantalla principal de Tecno Store" width="900">
 </p>
 
 
 
-## Objetivos
+## Características
 
-- Centralizar la información operativa del negocio en tiempo real.
-- Mantener la integridad y consistencia de los datos mediante transacciones (ACID).
-- Controlar el acceso y la visibilidad de opciones según el perfil del empleado.
-- Facilitar la gestión de inventario, abastecimiento y ventas al público.
-- Extraer inteligencia de negocio (reportes) para la toma de decisiones gerenciales.
+- Gestión de usuarios con control de acceso por roles.
+- Punto de Venta (POS).
+- Gestión de inventario.
+- Compras a proveedores.
+- Reportes gerenciales.
+- Tickets de venta.
+- Anulación de facturas con restitución automática del stock.
+- Arquitectura multicapa.
+- Integridad de datos mediante transacciones, procedimientos almacenados y triggers.
 
 
 
@@ -51,7 +59,30 @@ El proyecto fue diseñado utilizando una estricta **arquitectura por capas** par
 - Rendimiento mensual por vendedor.
 - Análisis de ventas según forma de pago.
 
+## Stack tecnológico
+- Python
+- Tkinter
+- MySQL
+- SQL (Stored Procedures, Views y Triggers)
 
+## Conceptos implementados
+- Layered Architecture
+- DAO Pattern
+- ACID Transactions
+- Role-Based Access Control (RBAC)
+- Soft Delete
+- SQL Views
+- Stored Procedures
+- Database Triggers
+
+## Aspectos destacados
+
+- Arquitectura desacoplada en capas.
+- Automatización de reglas de negocio mediante procedimientos almacenados y triggers.
+- Control de inventario completamente transaccional.
+- Reportes analíticos utilizando vistas SQL.
+- Separación entre lógica de negocio y presentación.
+- Sistema preparado para incorporar nuevas interfaces sin modificar la lógica existente.
 
 ## Roles del Sistema
 
@@ -120,20 +151,6 @@ Principales entidades relacionales gestionadas por MySQL:
 **Relaciones clave:** Implementación estricta de integridad referencial. Una venta agrupa múltiples detalles (productos), registrados por un usuario específico y abonados mediante una forma de pago. 
 
 
-
-## Tecnologías y Principios
-
-- **Backend:** Python 3.10+
-- **Frontend:** Tkinter (GUI)
-- **Base de Datos:** MySQL
-- **Control de Versiones:** Git & GitHub
-- **Principios Aplicados:** - Arquitectura por capas y separación de responsabilidades.
-  - Baja lógica (`activo = 0`).
-  - Control de concurrencia y Transacciones Críticas (`commit` / `rollback`).
-  - Extracción de datos vía Vistas SQL (`LEFT JOIN`, `GROUP BY`).
-
-
-
 ## Guía de Instalación y Despliegue 
 
 ### 1. Requisitos Previos
@@ -156,10 +173,14 @@ Principales entidades relacionales gestionadas por MySQL:
 - El sistema iniciará la interfaz gráfica.
 - *Nota: Para probar el sistema con privilegios máximos, inicie sesión con las credenciales del Administrador.*
 
+## Historia del proyecto
+
+Tecno Store fue desarrollado inicialmente como proyecto integrador para las asignaturas de Programación y Bases de Datos. Tras finalizar la evaluación académica, el proyecto continúa evolucionando como iniciativa personal incorporando mejoras funcionales y de usabilidad.
+
 
 ## Licencia
 
-Proyecto desarrollado exclusivamente con fines académicos para el Instituto de Formación Técnica Superior N.º 16 (Ciudad Autónoma de Buenos Aires). No destinado a uso comercial.
+Este proyecto continúa en desarrollo con fines educativos y de portfolio. Su código fuente se comparte como ejemplo de arquitectura de software, integración entre Python y MySQL y diseño de aplicaciones de escritorio. No destinado a uso comercial.
 
 ---
 
