@@ -8,7 +8,7 @@ Tecno Store es una aplicación de escritorio para la gestión integral de comerc
 
 El sistema integra ventas, compras, inventario, administración de usuarios y reportes gerenciales en una única plataforma, implementando una arquitectura multicapa que separa la interfaz, la lógica de negocio y el acceso a datos.
 
->Este proyecto comenzó como un desafío académico y continúa evolucionando como proyecto personal, incorporando mejoras de arquitectura, usabilidad y mantenibilidad.
+>Este proyecto comenzó como un desafío académico y continúa evolucionando, incorporando mejoras de arquitectura, usabilidad y mantenibilidad.
 
 
 <p align="center">
