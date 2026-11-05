@@ -8,9 +8,6 @@ Tecno Store es una aplicación de escritorio para la gestión integral de comerc
 
 El sistema integra ventas, compras, inventario, administración de usuarios y reportes gerenciales en una única plataforma, implementando una arquitectura multicapa que separa la interfaz, la lógica de negocio y el acceso a datos.
 
->Este proyecto comenzó como un desafío académico y continúa evolucionando, incorporando mejoras de arquitectura, usabilidad y mantenibilidad.
-
-
 <p align="center">
   <img src="images/captura.jpeg" alt="Pantalla principal de Tecno Store" width="900">
 </p>
@@ -58,6 +55,24 @@ El sistema integra ventas, compras, inventario, administración de usuarios y re
 - Ranking de productos más vendidos.
 - Rendimiento mensual por vendedor.
 - Análisis de ventas según forma de pago.
+
+## Evolución: API REST
+
+Se está diseñando una interfaz HTTP para ampliar las formas de integración de Tecno Store sin reemplazar su aplicación de escritorio. La propuesta utiliza **Flask** como capa de entrada y reutiliza, cuando sea posible, la lógica de negocio y el acceso a datos existentes.
+
+**Alcance inicial previsto (aún no implementado):**
+
+| Método | Ruta | Operación |
+| --- | --- | --- |
+| `GET` | `/api/productos` | Listar productos |
+| `GET` | `/api/productos/{id}` | Consultar un producto por ID |
+| `POST` | `/api/productos` | Registrar un producto |
+
+Las respuestas se diseñarán en formato JSON, con códigos HTTP y validaciones acordes a cada operación. Los contratos, las pruebas y las instrucciones de ejecución de la API se incorporarán a medida que se implemente.
+
+**Arquitectura prevista:** cliente HTTP → Flask → lógica de negocio → DAO → MySQL. La interfaz Tkinter continuará utilizando las capas existentes.
+
+Esta rama documenta una **funcionalidad en desarrollo**; los endpoints todavía no están disponibles.
 
 ## Stack tecnológico
 - Python
@@ -164,7 +179,7 @@ Principales entidades relacionales gestionadas por MySQL:
 3. Importe el script **`sql/02_tecno_store_db.cargaData.sql`** para inyectar el **Dataset de Prueba** (usuarios, productos, ventas de ejemplo).
 
 ### 3. Instalación de Dependencias
-1. Clone el repositorio: `git clone https://github.com/USUARIO/tecno-store.git`
+1. Clone el repositorio: `git clone https://github.com/programming-Regina/TecnoStore-Retail-Management-System.git`
 2. Ingrese a la carpeta del proyecto.
 3. Haga doble clic en el archivo **`setup.bat`**. Este script creará un entorno virtual aislado (`env`) e instalará automáticamente las dependencias necesarias.
 
@@ -175,7 +190,7 @@ Principales entidades relacionales gestionadas por MySQL:
 
 ## Historia del proyecto
 
-Tecno Store fue desarrollado inicialmente como proyecto integrador para las asignaturas de Programación y Bases de Datos. Tras finalizar la evaluación académica, el proyecto continúa evolucionando como iniciativa personal incorporando mejoras funcionales y de usabilidad.
+Tecno Store comenzó como un proyecto académico de Programación y Bases de Datos y continúa evolucionando como proyecto personal de portfolio.
 
 
 ## Licencia
