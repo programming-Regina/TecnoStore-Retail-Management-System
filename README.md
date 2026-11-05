@@ -1,12 +1,12 @@
 # Tecno Store — Retail Management System
 
-Sistema integral de gestión y Punto de Venta (POS) para comercios minoristas de productos tecnológicos.
+Sistema de gestión comercial y punto de venta (POS) en evolución hacia una arquitectura con API REST.
 
 ## Descripción
 
-Tecno Store es una aplicación de escritorio para la gestión integral de comercios minoristas, desarrollada en Python, Tkinter y MySQL.
+Tecno Store es un sistema de gestión para comercios minoristas de productos tecnológicos. Su base funcional, desarrollada en Python y MySQL, contempla ventas, compras, inventario, usuarios y reportes.
 
-El sistema integra ventas, compras, inventario, administración de usuarios y reportes gerenciales en una única plataforma, implementando una arquitectura multicapa que separa la interfaz, la lógica de negocio y el acceso a datos.
+Esta rama está dedicada a incorporar una **API REST con Flask** para exponer operaciones del sistema a clientes HTTP. La versión existente utiliza una interfaz de escritorio con Tkinter; la API constituye una vía de acceso adicional, no una migración ya completada.
 
 <p align="center">
   <img src="images/captura.jpeg" alt="Pantalla principal de Tecno Store" width="900">
@@ -14,7 +14,7 @@ El sistema integra ventas, compras, inventario, administración de usuarios y re
 
 
 
-## Características
+## Capacidades del sistema existente
 
 - Gestión de usuarios con control de acceso por roles.
 - Punto de Venta (POS).
@@ -28,7 +28,7 @@ El sistema integra ventas, compras, inventario, administración de usuarios y re
 
 
 
-## Funcionalidades Principales
+## Funcionalidades de la versión existente
 
 ### Gestión de Usuarios (Personal)
 - Alta, modificación y baja lógica de empleados.
@@ -74,13 +74,18 @@ Las respuestas se diseñarán en formato JSON, con códigos HTTP y validaciones 
 
 Esta rama documenta una **funcionalidad en desarrollo**; los endpoints todavía no están disponibles.
 
-## Stack tecnológico
-- Python
-- Tkinter
-- MySQL
-- SQL (Stored Procedures, Views y Triggers)
+## Tecnologías y estado
 
-## Conceptos implementados
+| Tecnología | Función | Estado en esta rama |
+| --- | --- | --- |
+| Python | Lógica de negocio y aplicación | Existente |
+| MySQL | Persistencia de datos | Existente |
+| SQL (procedimientos, vistas y triggers) | Integridad y operaciones de datos | Existente |
+| Tkinter | Interfaz gráfica de escritorio heredada | Existente; se conserva |
+| Flask | Exposición de operaciones mediante API REST | Planificado; pendiente de implementación |
+| HTTP y JSON | Solicitudes y respuestas de la API | Planificado; pendiente de implementación |
+
+## Patrones y conceptos de la versión existente
 - Layered Architecture
 - DAO Pattern
 - ACID Transactions
@@ -90,7 +95,7 @@ Esta rama documenta una **funcionalidad en desarrollo**; los endpoints todavía 
 - Stored Procedures
 - Database Triggers
 
-## Aspectos destacados
+## Aspectos destacados de la base existente
 
 - Arquitectura desacoplada en capas.
 - Automatización de reglas de negocio mediante procedimientos almacenados y triggers.
@@ -99,7 +104,7 @@ Esta rama documenta una **funcionalidad en desarrollo**; los endpoints todavía 
 - Separación entre lógica de negocio y presentación.
 - Sistema preparado para incorporar nuevas interfaces sin modificar la lógica existente.
 
-## Roles del Sistema
+## Roles de la aplicación existente
 
 El menú principal se adapta dinámicamente según quién inicie sesión:
 
@@ -110,9 +115,9 @@ El menú principal se adapta dinámicamente según quién inicie sesión:
 
 
 
-## Arquitectura del Software (Modelo Multicapa)
+## Arquitectura actual y evolución propuesta
 
-El sistema se estructura en módulos independientes para evitar el acoplamiento:
+La base del proyecto mantiene la separación entre presentación, lógica de negocio y acceso a datos. La siguiente estructura corresponde a la implementación existente (todavía no incluye Flask):
 
 ```text
 tecno_store/
@@ -166,7 +171,7 @@ Principales entidades relacionales gestionadas por MySQL:
 **Relaciones clave:** Implementación estricta de integridad referencial. Una venta agrupa múltiples detalles (productos), registrados por un usuario específico y abonados mediante una forma de pago. 
 
 
-## Guía de Instalación y Despliegue 
+## Instalación y ejecución de la versión de escritorio 
 
 ### 1. Requisitos Previos
 - **Python 3.10+** (Asegurarse de tener Python agregado al `PATH` de Windows).
@@ -188,7 +193,7 @@ Principales entidades relacionales gestionadas por MySQL:
 - El sistema iniciará la interfaz gráfica.
 - *Nota: Para probar el sistema con privilegios máximos, inicie sesión con las credenciales del Administrador.*
 
-## Historia del proyecto
+## Origen del proyecto
 
 Tecno Store comenzó como un proyecto académico de Programación y Bases de Datos y continúa evolucionando como proyecto personal de portfolio.
 
