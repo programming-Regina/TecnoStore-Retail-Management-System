@@ -7,3 +7,4 @@ db/__pycache__/connection.cpython-314.pyc
 *.code-workspace
 regina.py
 views/reportes_view.py_OLD.py
+.venv/

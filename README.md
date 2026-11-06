@@ -60,19 +60,19 @@ Esta rama está dedicada a incorporar una **API REST con Flask** para exponer op
 
 Se está diseñando una interfaz HTTP para ampliar las formas de integración de Tecno Store sin reemplazar su aplicación de escritorio. La propuesta utiliza **Flask** como capa de entrada y reutiliza, cuando sea posible, la lógica de negocio y el acceso a datos existentes.
 
-**Alcance inicial previsto (aún no implementado):**
+**Alcance incremental:**
 
 | Método | Ruta | Operación |
 | --- | --- | --- |
-| `GET` | `/api/productos` | Listar productos |
-| `GET` | `/api/productos/{id}` | Consultar un producto por ID |
-| `POST` | `/api/productos` | Registrar un producto |
+| `GET` | `/api/productos` | Implementado: listar productos activos |
+| `GET` | `/api/productos/{id}` | Implementado: consultar un producto activo por ID |
+| `POST` | `/api/productos` | Implementado: registrar un producto |
 
-Las respuestas se diseñarán en formato JSON, con códigos HTTP y validaciones acordes a cada operación. Los contratos, las pruebas y las instrucciones de ejecución de la API se incorporarán a medida que se implemente.
+Los endpoints de consulta responden en JSON. El [registro breve de cambios](docs/cambios-api.md) reúne el contrato, la ejecución local, las pruebas y las notas para actualizar diagramas.
 
-**Arquitectura prevista:** cliente HTTP → Flask → lógica de negocio → DAO → MySQL. La interfaz Tkinter continuará utilizando las capas existentes.
+**Arquitectura del primer endpoint:** cliente HTTP → Flask → lógica de negocio → DAO → MySQL. La interfaz Tkinter continuará utilizando las capas existentes.
 
-Esta rama documenta una **funcionalidad en desarrollo**; los endpoints todavía no están disponibles.
+Esta rama contiene una **funcionalidad en desarrollo**: están disponibles el listado, la consulta por ID y el alta. La API incluye login, logout y permisos para el alta; el despliegue sigue pendiente.
 
 ## Tecnologías y estado
 
@@ -82,8 +82,8 @@ Esta rama documenta una **funcionalidad en desarrollo**; los endpoints todavía 
 | MySQL | Persistencia de datos | Existente |
 | SQL (procedimientos, vistas y triggers) | Integridad y operaciones de datos | Existente |
 | Tkinter | Interfaz gráfica de escritorio heredada | Existente; se conserva |
-| Flask | Exposición de operaciones mediante API REST | Planificado; pendiente de implementación |
-| HTTP y JSON | Solicitudes y respuestas de la API | Planificado; pendiente de implementación |
+| Flask | Exposición de operaciones mediante API REST | Implementado para el listado de productos |
+| HTTP y JSON | Solicitudes y respuestas de la API | Implementado para el listado de productos |
 
 ## Patrones y conceptos de la versión existente
 - Layered Architecture
@@ -117,7 +117,7 @@ El menú principal se adapta dinámicamente según quién inicie sesión:
 
 ## Arquitectura actual y evolución propuesta
 
-La base del proyecto mantiene la separación entre presentación, lógica de negocio y acceso a datos. La siguiente estructura corresponde a la implementación existente (todavía no incluye Flask):
+La base del proyecto mantiene la separación entre presentación, lógica de negocio y acceso a datos. La siguiente estructura describe la base de escritorio; la entrada adicional Flask está en `api/` y su registro de evolución en `docs/cambios-api.md`:
 
 ```text
 tecno_store/

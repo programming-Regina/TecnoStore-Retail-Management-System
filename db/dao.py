@@ -31,7 +31,7 @@ def obtener_formas_pago():
 # =============================================================================
 # BUSCA USUARIO POR NOMBRE
 # =============================================================================
-def obtener_usuario_por_username(username_ingresado):
+def obtener_usuario_por_username(username_ingresado, *, propagar_errores=False):
     """
     PROPÓSITO: genera el username con nombre y apellido y compara con la BD.
 
@@ -48,22 +48,23 @@ def obtener_usuario_por_username(username_ingresado):
     """
     conn = conectar_bd()
     if not conn:
+        if propagar_errores:
+            raise ConnectionError("No se pudo conectar a la base de datos.")
         return None
-    
-    cursor = conn.cursor(dictionary=True)
-    
-    # LOWER y REPLACE dejan el username limpio
-    query = """
-        SELECT u.id_usuario, u.nombre, u.apellido, u.clave, u.activo, r.rol
-        FROM Usuario u
-        JOIN Rol r ON u.id_rol = r.id_rol
-        WHERE LOWER(REPLACE(CONCAT(TRIM(u.nombre), TRIM(u.apellido)), ' ', '')) = LOWER(%s)
-    """    
-    cursor.execute(query, (username_ingresado,))
-    resultado = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    return resultado
+    cursor = None
+    try:
+        cursor = conn.cursor(dictionary=True)
+        query = """
+            SELECT u.id_usuario, u.nombre, u.apellido, u.clave, u.activo, r.rol
+            FROM Usuario u JOIN Rol r ON u.id_rol = r.id_rol
+            WHERE LOWER(REPLACE(CONCAT(TRIM(u.nombre), TRIM(u.apellido)), ' ', '')) = LOWER(%s)
+        """
+        cursor.execute(query, (username_ingresado,))
+        return cursor.fetchone()
+    finally:
+        if cursor is not None:
+            cursor.close()
+        conn.close()
 
 
 # =============================================================================
@@ -130,17 +131,18 @@ def obtener_producto_por_id(id):
                    existe, o None si no se encuentra en el catálogo.
     """
     conexion = conectar_bd()
-    cursor = conexion.cursor(dictionary=True)
-    
-    query = "SELECT id_producto, id_categoria, descripcion, marca, precio_compra, precio_venta, stock, activo FROM Producto WHERE id_producto = %s"
-    cursor.execute(query, (id,))
-    
-    producto = cursor.fetchone()
-    
-    cursor.close()
-    conexion.close()
-    
-    return producto
+    if not conexion:
+        raise ConnectionError("No se pudo conectar a la base de datos.")
+    cursor = None
+    try:
+        cursor = conexion.cursor(dictionary=True)
+        query = "SELECT id_producto, id_categoria, descripcion, marca, precio_compra, precio_venta, stock, activo FROM Producto WHERE id_producto = %s"
+        cursor.execute(query, (id,))
+        return cursor.fetchone()
+    finally:
+        if cursor is not None:
+            cursor.close()
+        conexion.close()
 
 
 # =============================================================================
@@ -410,20 +412,27 @@ def dar_alta_logica_producto(id_producto):
 # =============================================================================
 # LISTA DE PRODUCTOS EN VENTA ORDENADOS POR NOMBRE
 # =============================================================================
-def obtener_productos_activos_ordenados():
+def obtener_productos_activos_ordenados(*, propagar_errores=False):
+    """Lista activos; la API puede solicitar errores en lugar de una lista vacía."""
     from db.connection import conectar_bd
     conexion = conectar_bd()
-    if not conexion: return []
-    cursor = conexion.cursor(dictionary=True)
+    if not conexion:
+        if propagar_errores:
+            raise ConnectionError("No se pudo conectar a la base de datos.")
+        return []
+    cursor = None
     try:
-        # Trae solo los activos (activo = 1)
+        cursor = conexion.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Producto WHERE activo = 1 ORDER BY descripcion")
         return cursor.fetchall()
     except Exception as e:
+        if propagar_errores:
+            raise
         print(f"Error: {e}")
         return []
     finally:
-        cursor.close()
+        if cursor is not None:
+            cursor.close()
         conexion.close()
 
 
@@ -455,24 +464,32 @@ def obtener_productos_inactivos():
 # =============================================================================
 # DA DE ALTA DE UN NUEVO PRODUCTO (CON STOCK 0)
 # =============================================================================
-def insertar_producto(descripcion, marca, precio_compra, precio_venta, id_categoria):
+def insertar_producto(descripcion, marca, precio_compra, precio_venta, id_categoria, *, retornar_id=False):
     from db.connection import conectar_bd
     conexion = conectar_bd()
-    if not conexion: return False
-    cursor = conexion.cursor()
+    if not conexion:
+        if retornar_id:
+            raise ConnectionError("No se pudo conectar a la base de datos.")
+        return False
+    cursor = None
     try:
+        cursor = conexion.cursor()
         cursor.execute("""
-            INSERT INTO Producto (descripcion, marca, precio_compra, precio_venta, id_categoria, stock, activo) 
+            INSERT INTO Producto (descripcion, marca, precio_compra, precio_venta, id_categoria, stock, activo)
             VALUES (%s, %s, %s, %s, %s, 0, 1)
         """, (descripcion, marca, precio_compra, precio_venta, id_categoria))
+        id_producto = cursor.lastrowid
         conexion.commit()
-        return cursor.rowcount > 0
+        return id_producto if retornar_id else cursor.rowcount > 0
     except Exception as e:
         conexion.rollback()
+        if retornar_id:
+            raise
         print(f"Error al insertar: {e}")
         return False
     finally:
-        cursor.close()
+        if cursor is not None:
+            cursor.close()
         conexion.close()
 
 

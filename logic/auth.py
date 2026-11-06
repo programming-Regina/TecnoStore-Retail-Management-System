@@ -17,7 +17,7 @@ USUARIO_ID = None
 # =============================================================================
 # VALIDA ACCESO
 # =============================================================================
-def autenticar_usuario(username_ingresado, clave_ingresada):
+def autenticar_usuario(username_ingresado, clave_ingresada, *, sesion_escritorio=True):
     """
     PROPÓSITO: valida credenciales usando username compuesto.
 
@@ -36,7 +36,8 @@ def autenticar_usuario(username_ingresado, clave_ingresada):
     # Elimina espacios
     username_limpio = username_ingresado.strip().replace(" ", "")
     
-    usuario = obtener_usuario_por_username(username_limpio)
+    usuario = (obtener_usuario_por_username(username_limpio) if sesion_escritorio else
+               obtener_usuario_por_username(username_limpio, propagar_errores=True))
     
     if not usuario:
         return {"error": "Usuario inexistente."}
@@ -52,7 +53,8 @@ def autenticar_usuario(username_ingresado, clave_ingresada):
         rol_final = "administrador"
     
     global USUARIO_ID
-    USUARIO_ID = usuario["id_usuario"]
+    if sesion_escritorio:
+        USUARIO_ID = usuario["id_usuario"]
         
     return {
         "success": True,
@@ -60,3 +62,12 @@ def autenticar_usuario(username_ingresado, clave_ingresada):
         "rol": rol_final,
         "username": usuario['nombre'] + usuario['apellido'] # para uso interno (no sacar)
     }
+
+
+def consultar_rol_api(username):
+    """Revalida el estado y rol actual sin usar la sesión global de Tkinter."""
+    usuario = obtener_usuario_por_username(username, propagar_errores=True)
+    if not usuario or not usuario["activo"]:
+        return None
+    rol = usuario["rol"].lower()
+    return "administrador" if rol == "admin" else rol
