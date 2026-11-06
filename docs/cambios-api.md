@@ -3,7 +3,7 @@
 Cambios más recientes arriba. Registro breve de lo implementado en la rama `feature/rest-api`.
 
 ## 2026-11-06 — Publicación de la rama en GitHub
-- Se confirmó el envío de los cambios a `origin/feature/rest-api` (commit `25724a4`).
+- Se confirmó el envío de los cambios a `origin/feature/rest-api`.
 - La rama local quedó sincronizada con la remota. `main` no se modificó.
 - **Próximo paso:** implementar modificación de productos (`PATCH /api/productos/{id}`), luego baja lógica y reactivación. Probar y documentar cada operación.
 
