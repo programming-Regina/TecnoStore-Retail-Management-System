@@ -3,7 +3,7 @@ import os
 import secrets
 from datetime import timedelta
 
-from flask import Flask, jsonify, request, url_for, session
+from flask import Flask, jsonify, request, url_for, session, render_template, send_from_directory
 from logic.auth import autenticar_usuario, consultar_rol_api
 from mysql.connector import Error, IntegrityError
 
@@ -21,6 +21,15 @@ def create_app():
         PERMANENT_SESSION_LIFETIME=timedelta(hours=1),
         SESSION_REFRESH_EACH_REQUEST=False,
     )
+
+    @app.get("/")
+    def demo():
+        return render_template("productos.html")
+
+    @app.get("/assets/img/tecno_store_logo.png")
+    def logo():
+        return send_from_directory(os.path.join(app.root_path, "..", "assets", "img"),
+                                   "tecno_store_logo.png")
 
     @app.post("/api/login")
     def login():

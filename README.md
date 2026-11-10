@@ -205,3 +205,45 @@ Este proyecto continúa en desarrollo con fines educativos y de portfolio. Su c�
 ---
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/regina-molares/)
+
+## Demo web local
+
+La pantalla se sirve desde Flask en `http://127.0.0.1:5000/`, con HTML, CSS y
+JavaScript sin frameworks. Tkinter mantiene su ejecución habitual.
+
+Desde PowerShell, en la raíz del proyecto:
+
+```powershell
+.\.venv\Scripts\python -m pip install -r requirements-api.txt
+.\.venv\Scripts\python -m flask --app api run
+```
+
+Si no existe `.venv`, crear primero con `python -m venv .venv`.
+Iniciar MySQL local con la base y datos del proyecto ya importados, según
+`db/connection.py` y los pasos de instalación de este README.
+Abrir la dirección anterior en el navegador; no abrir el HTML como archivo.
+Detener Flask con Ctrl+C.
+
+Para probar la demo:
+
+1. Ver el listado y consultar un ID de la tabla. Probar también uno inexistente.
+   “Ver todos” vuelve al catálogo completo.
+2. Iniciar sesión con un usuario existente de rol administrador o depositero.
+   Usa los mismos usuarios de la aplicación de escritorio y la sesión HTTP existente.
+3. Completar el alta con una categoría existente (consultar su ID en la tabla
+   `categoria` de MySQL), precios positivos y venta mayor a compra. No se agrega
+   una ruta de categorías. El alta guarda un producto real con stock 0 y muestra
+   su ID; el catálogo se actualiza después.
+4. Cerrar sesión. Las consultas siguen disponibles; registrar sin sesión muestra
+   el mensaje de la API. Si la sesión vence, volver a iniciar sesión.
+
+Los formularios conservan sus datos ante errores del servidor (la contraseña se
+limpia después del intento). No se guardan credenciales en el navegador.
+El logo se sirve desde `assets/img/tecno_store_logo.png`; incluir ese archivo al
+compartir los cambios. No se modifican las vistas Tkinter ni la base automáticamente.
+
+Verificación automatizada sin escribir en MySQL:
+
+```powershell
+.\.venv\Scripts\python -m unittest discover -s tests -v
+```

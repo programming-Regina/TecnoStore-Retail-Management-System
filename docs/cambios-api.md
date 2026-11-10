@@ -228,3 +228,22 @@ cada operación antes de continuar.
 responde a restricciones de las asignaturas en esa etapa. Incorporar esta
 justificación al README y a la documentación académica queda pendiente; Regina
 lo anotará en sus pendientes. El despliegue en Hostinger se aborda al final.
+
+## 2026-11-09 — Pantalla web para demo local
+
+- `GET /` sirve una pantalla HTML con tabla, consulta por ID y formulario de alta.
+- CSS y JavaScript propios en `api/static/`; sin nuevas dependencias.
+- Reutiliza las tres rutas de productos y login/logout existentes, con cookies de
+  sesión del mismo origen. Las categorías se ingresan por ID, sin nueva API.
+- Logo existente en `assets/img/tecno_store_logo.png`, servido por Flask.
+- Paleta azul #0E2A47 / #435D74, fondo claro y disposición adaptable al ancho.
+- Estados de carga, errores de API/red y confirmación del alta con ID asignado.
+  Los datos del catálogo se insertan como texto; no se interpretan como HTML.
+- README: pasos de inicio y prueba manual. Tkinter, lógica, DAO y SQL intactos.
+
+Validación: 27 pruebas existentes aprobadas; JavaScript validado con `node --check`;
+HTML, CSS, JavaScript y logo responden 200. Verificación en navegador del diseño,
+error de catálogo y rechazo de alta sin sesión, conservando los campos.
+MySQL no estaba disponible en 127.0.0.1:3306: no se pudo completar el recorrido
+real de login/consulta/alta. No se insertaron productos de prueba en la base.
+Cambios locales en feature/rest-api, sin publicar ni desplegar.

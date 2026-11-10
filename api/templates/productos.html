@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Productos · Tecno Store</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='productos.css') }}">
+  <script src="{{ url_for('static', filename='productos.js') }}" defer></script>
+</head>
+<body>
+  <header><div class="container brand"><img src="{{ url_for('logo') }}" alt="Tecno Store"><div><strong>Tecno Store</strong><p>Gestión de productos</p></div></div></header>
+  <main class="container">
+    <h1>Productos</h1>
+    <p class="intro">Consultá el catálogo o registrá un nuevo producto.</p>
+    <div class="layout">
+      <section class="panel catalogo" aria-labelledby="catalogo-titulo">
+        <h2 id="catalogo-titulo">Catálogo activo</h2>
+        <form id="consulta" class="toolbar">
+          <label for="producto-id">ID de producto<input id="producto-id" type="number" min="1" max="2147483647" step="1" required placeholder="Ej. 14"></label>
+          <button type="submit">Consultar</button>
+          <button type="button" id="ver-todos" class="secondary">Ver todos</button>
+        </form>
+        <p id="catalogo-estado" role="status" aria-live="polite"></p>
+        <div class="table-wrap"><table><caption class="sr-only">Productos consultados</caption><thead><tr><th scope="col">ID</th><th scope="col">Descripción</th><th scope="col">Marca</th><th scope="col">Precio de venta</th><th scope="col">Stock</th></tr></thead><tbody id="productos"></tbody></table></div>
+      </section>
+      <aside>
+        <section class="panel" aria-labelledby="sesion-titulo">
+          <h2 id="sesion-titulo">Acceso para altas</h2>
+          <p class="help">Usá tu usuario de administrador o depositero. Las consultas no requieren sesión.</p>
+          <form id="login">
+            <label for="username">Usuario<input id="username" name="username" autocomplete="username" required></label>
+            <label for="clave">Contraseña<input id="clave" name="clave" type="password" autocomplete="current-password" required></label>
+            <button type="submit">Iniciar sesión</button>
+          </form>
+          <button type="button" id="logout" class="secondary" hidden>Cerrar sesión</button>
+          <p id="sesion-estado" role="status" aria-live="polite">Si ya iniciaste sesión en este navegador, podés registrar el producto directamente.</p>
+        </section>
+        <section class="panel" aria-labelledby="alta-titulo">
+          <h2 id="alta-titulo">Nuevo producto</h2>
+          <form id="alta">
+            <label for="descripcion">Descripción<input id="descripcion" name="descripcion" maxlength="100" required></label>
+            <label for="marca">Marca<input id="marca" name="marca" maxlength="50" required></label>
+            <div class="precios">
+              <label for="precio_compra">Precio de compra<input id="precio_compra" name="precio_compra" type="number" min="0.01" max="99999999.99" step="0.01" required></label>
+              <label for="precio_venta">Precio de venta<input id="precio_venta" name="precio_venta" type="number" min="0.01" max="99999999.99" step="0.01" required></label>
+            </div>
+            <label for="id_categoria">ID de categoría<input id="id_categoria" name="id_categoria" type="number" min="1" max="2147483647" step="1" aria-describedby="categoria-ayuda" required></label>
+            <p class="help" id="categoria-ayuda">Ingresá el ID de una categoría existente. La venta debe superar al precio de compra. El stock inicial será 0.</p>
+            <button type="submit">Registrar producto</button>
+          </form>
+          <p id="alta-estado" role="status" aria-live="polite"></p>
+        </section>
+      </aside>
+    </div>
+    <noscript>Activá JavaScript para consultar y registrar productos.</noscript>
+  </main>
+</body>
+</html>
