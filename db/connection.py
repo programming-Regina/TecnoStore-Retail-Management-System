@@ -29,19 +29,24 @@ def conectar_bd():
     ERRORES: Captura excepciones de tipo mysql.connector.Error para evitar caídas del sistema.
     """
     try:
-        conexion = mysql.connector.connect(
-            host="127.0.0.1",
-            user="root",
-            password="",
-            database="tecno_store_db",
-            port=3306
-        )
-        
+        parametros = dict(host="127.0.0.1", user="root", password="",
+                          database="tecno_store_db", port=3306)
+        # Sin DB_HOST se conserva la conexión local del escritorio.
+        if os.environ.get("DB_HOST"):
+            parametros = dict(
+                host=os.environ["DB_HOST"], user=os.environ["DB_USER"],
+                password=os.environ["DB_PASSWORD"], database=os.environ["DB_NAME"],
+                port=int(os.environ.get("DB_PORT", "3306")), connection_timeout=10,
+                ssl_ca=os.environ.get("DB_SSL_CA", "/etc/ssl/certs/ca-certificates.crt"),
+                ssl_disabled=False, ssl_verify_cert=True, ssl_verify_identity=True,
+            )
+        conexion = mysql.connector.connect(**parametros)
+
         if conexion.is_connected():
             return conexion
 
     except Error as e:
-        print(f"Error al conectar a la base de datos: {e}")
+        print("No se pudo conectar a la base de datos.")
         return None
 
 # Cómo usar en las funciones:

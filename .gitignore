@@ -8,3 +8,6 @@ db/__pycache__/connection.cpython-314.pyc
 regina.py
 views/reportes_view.py_OLD.py
 .venv/
+
+.env
+.env.*

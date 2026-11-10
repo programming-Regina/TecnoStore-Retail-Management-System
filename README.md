@@ -247,3 +247,34 @@ Verificación automatizada sin escribir en MySQL:
 ```powershell
 .\.venv\Scripts\python -m unittest discover -s tests -v
 ```
+
+
+## Demo pública en Render con MySQL externo
+
+Crear un Web Service gratuito desde la rama `feature/rest-api`, Python 3.13
+(variable `PYTHON_VERSION=3.13.9`). Build: `pip install -r requirements-api.txt`.
+Start: `gunicorn 'api:create_app()' --bind 0.0.0.0:$PORT`.
+No usar `flask run` como servidor público.
+
+En Environment de Render configurar `DB_HOST`, `DB_PORT=3306`, `DB_NAME`,
+`DB_USER`, `DB_PASSWORD` y `FLASK_SECRET_KEY` (valor aleatorio generado por Render).
+Guardar los secretos solo en Render. Cookies Secure automáticas en Render,
+HttpOnly y SameSite Strict; el login y los permisos existentes se conservan.
+La conexión externa exige TLS, validación de CA y del nombre del servidor.
+`DB_SSL_CA` permite indicar una cadena CA confiable específica; por defecto se
+usa `/etc/ssl/certs/ca-certificates.crt` del entorno Linux. No desactivar TLS.
+Sin `DB_HOST` se conserva la configuración local para Tkinter.
+
+Antes de publicar, autorizar en MySQL remoto únicamente las IP/rangos de salida
+indicados por Render en Connect → Outbound, para la base exclusiva de demo.
+Confirmar que el proveedor acepta todos esos rangos sin habilitar cualquier host;
+si no lo permite, detenerse y revisar alternativas sin contratar extras.
+Usar datos y usuarios ficticios, con contraseñas de aplicación exclusivas para
+la demo. El usuario MySQL de ejecución solo necesita SELECT sobre Usuario y Rol,
+SELECT e INSERT sobre Producto; usar un usuario separado con esos permisos si
+el panel lo permite. No compartir el usuario de importación públicamente.
+
+Validar desde la URL HTTPS: pantalla y logo, listado, consulta por ID, ID inexistente,
+login, alta autorizada con stock 0, rechazo sin sesión y con rol no autorizado.
+Comprobar triggers y procedimientos por separado antes de dar por completa la demo.
+El plan gratuito puede suspender la aplicación por inactividad y tardar en reactivar.

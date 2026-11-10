@@ -11,13 +11,18 @@ from logic.inventario import procesar_consulta_stock, consultar_producto_activo,
 
 
 def create_app():
+    if os.environ.get("RENDER") and not os.environ.get("FLASK_SECRET_KEY"):
+        raise RuntimeError("Configurar FLASK_SECRET_KEY antes de iniciar en Render.")
+    if os.environ.get("RENDER") and any(not os.environ.get(k) for k in
+            ("DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME")):
+        raise RuntimeError("Configurar las variables DB antes de iniciar en Render.")
     app = Flask(__name__)
     app.json.ensure_ascii = False
     app.config.update(
         SECRET_KEY=os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32),
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Strict",
-        SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE") == "1",
+        SESSION_COOKIE_SECURE=bool(os.environ.get("RENDER")) or os.environ.get("COOKIE_SECURE") == "1",
         PERMANENT_SESSION_LIFETIME=timedelta(hours=1),
         SESSION_REFRESH_EACH_REQUEST=False,
     )
