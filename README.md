@@ -281,3 +281,14 @@ Validar desde la URL HTTPS: pantalla y logo, listado, consulta por ID, ID inexis
 login, alta autorizada con stock 0, rechazo sin sesión y con rol no autorizado.
 Comprobar triggers y procedimientos por separado antes de dar por completa la demo.
 El plan gratuito puede suspender la aplicación por inactividad y tardar en reactivar.
+
+
+## Demo publicada en HelioHost Tommy
+
+Interfaz y API: **https://reginamolares.helioho.st/**.
+
+El alojamiento usa MariaDB y sirve la misma aplicación Flask mediante un
+adaptador CGI, autorizado para conservar los secretos con permisos privados.
+La aplicación Tkinter y los contratos de la API se mantienen. Ver la
+[configuración, pruebas públicas y decisiones de despliegue](docs/despliegue-heliohost.md).
+No usar el archivo de reglas WSGI para sobrescribir el arranque CGI vigente.

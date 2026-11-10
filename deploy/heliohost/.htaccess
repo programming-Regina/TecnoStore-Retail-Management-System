@@ -1,0 +1,8 @@
+Options -Indexes +ExecCGI
+AddHandler cgi-script .py
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteRule ^flask\.wsgi(?:/.*)?$ - [L]
+RewriteRule ^(.*)$ flask.wsgi/$1 [QSA,PT,L]

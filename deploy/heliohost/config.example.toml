@@ -1,0 +1,8 @@
+# Copiar como tecnostore-private/config.toml, fuera de httpdocs.
+# Permisos recomendados: carpeta 700, archivo 600; nunca subir a Git.
+[environment]
+FLASK_SECRET_KEY = "REEMPLAZAR_CON_SECRETO_ALEATORIO"
+DB_UNIX_SOCKET = "/var/lib/mysql/mysql.sock" # confirmar en el panel/servidor
+DB_NAME = "REEMPLAZAR_BASE_PLESK"
+DB_USER = "REEMPLAZAR_USUARIO_PLESK"
+DB_PASSWORD = "REEMPLAZAR_CON_CREDENCIAL_PRIVADA"

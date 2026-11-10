@@ -45,7 +45,16 @@ def autenticar_usuario(username_ingresado, clave_ingresada, *, sesion_escritorio
     if usuario["activo"] == 0:
         return {"error": "Usuario inhabilitado para el ingreso."}
         
-    if usuario["clave"] != clave_ingresada:
+    clave_guardada = usuario["clave"]
+    if clave_guardada.startswith(("scrypt:", "pbkdf2:")):
+        # Importación diferida: el escritorio anterior no necesita Flask/Werkzeug.
+        from werkzeug.security import check_password_hash
+        clave_valida = check_password_hash(clave_guardada, clave_ingresada)
+    else:
+        # Compatibilidad con usuarios existentes de la aplicación de escritorio.
+        import hmac
+        clave_valida = hmac.compare_digest(clave_guardada.encode(), clave_ingresada.encode())
+    if not clave_valida:
         return {"error": "Contraseña incorrecta."}
     
     rol_final = usuario["rol"].lower()

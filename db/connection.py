@@ -31,14 +31,23 @@ def conectar_bd():
     try:
         parametros = dict(host="127.0.0.1", user="root", password="",
                           database="tecno_store_db", port=3306)
-        # Sin DB_HOST se conserva la conexión local del escritorio.
-        if os.environ.get("DB_HOST"):
+        # Socket local del alojamiento: no atraviesa la red ni requiere TLS.
+        if os.environ.get("DB_UNIX_SOCKET"):
+            parametros = dict(
+                unix_socket=os.environ["DB_UNIX_SOCKET"],
+                user=os.environ["DB_USER"], password=os.environ["DB_PASSWORD"],
+                database=os.environ["DB_NAME"], connection_timeout=10,
+                use_pure=True,
+            )
+        # Sin configuración externa se conserva la conexión de escritorio.
+        elif os.environ.get("DB_HOST"):
             parametros = dict(
                 host=os.environ["DB_HOST"], user=os.environ["DB_USER"],
                 password=os.environ["DB_PASSWORD"], database=os.environ["DB_NAME"],
                 port=int(os.environ.get("DB_PORT", "3306")), connection_timeout=10,
                 ssl_ca=os.environ.get("DB_SSL_CA", "/etc/ssl/certs/ca-certificates.crt"),
                 ssl_disabled=False, ssl_verify_cert=True, ssl_verify_identity=True,
+                use_pure=True,
             )
         conexion = mysql.connector.connect(**parametros)
 
@@ -46,7 +55,8 @@ def conectar_bd():
             return conexion
 
     except Error as e:
-        print("No se pudo conectar a la base de datos.")
+        import sys
+        print(f"No se pudo conectar a la base de datos (código {e.errno}).", file=sys.stderr)
         return None
 
 # Cómo usar en las funciones:

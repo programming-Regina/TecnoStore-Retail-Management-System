@@ -329,3 +329,70 @@ visual en navegador en esta segunda mejora.
 
 Cambios locales en `feature/rest-api`, pendientes de revisión; sin commit,
 push, modificación de main ni despliegue.
+
+
+## 2026-11-10 — Preparación para HelioHost Tommy
+
+- Entrada WSGI en `deploy/heliohost/flask.wsgi` y reglas Apache, con aplicación
+  y configuración TOML fuera de la raíz pública. Sin servidor de desarrollo.
+- Validación de secretos en producción y cookies Secure; conexión por socket
+  Unix local opcional, conservando TLS verificado para MySQL externo y la
+  configuración local de escritorio. Conector puro para WSGI compartido.
+- Soporte de hashes de contraseñas para nuevos usuarios de demo; se conserva
+  autenticación de usuarios anteriores, roles y contratos HTTP.
+- Scripts de base nueva sin DROP/CREATE DATABASE y catálogo sin usuarios ni
+  contraseñas públicas. Las fuentes SQL originales se conservan.
+- 39 pruebas locales aprobadas e importación completa verificada en una base
+  temporal aislada de MariaDB 10.4.24 (10 tablas, 4 vistas, 2 rutinas, 3 triggers).
+- Despliegue remoto pendiente de inicio de sesión del titular. Detalles y
+  verificaciones pendientes en `docs/despliegue-heliohost.md`.
+
+
+### Avance remoto en Tommy2
+
+- Base exclusiva y usuario solo local creados con confirmación del titular.
+- Importados esquema, catálogo, 4 vistas, 2 procedimientos y 3 triggers.
+- Cargado el resto del dataset a pedido del titular: 5 proveedores, 6 compras,
+  12 detalles de compra, 87 ventas y 94 detalles de venta. Cuatro usuarios de
+  demo activos con hashes y tres inactivos para referencias históricas.
+- Configuración y contraseña de base guardadas fuera de httpdocs, permisos 600.
+- Paquete WSGI subido. La verificación pública detectó que faltaba el certificado
+  HTTPS; se inició emisión gratuita autorizada. Pruebas públicas pendientes.
+
+- Certificado Let's Encrypt emitido, renovación automática y TLS validado sin
+  omitir comprobaciones. La URL aún sirve bienvenida del alojamiento; API 404 y
+  entrada WSGI 403. Archivos presentes con permisos 644 y ajuste AddHandler de la
+  wiki aplicado. Pendiente activación/recarga de Apache y pruebas públicas; no
+  se declara el despliegue completo ni se cambia la arquitectura.
+
+- Diagnóstico del 500 tras activarse Apache: WSGI no puede leer config.toml con
+  permisos 600 porque ejecuta bajo otro usuario. No se relajaron permisos.
+  Pendiente decidir entrada CGI bajo la cuenta o permisos específicos de WSGI.
+
+- Con autorización del titular se probó CGIHandler conservando Flask. Resuelve
+  la lectura del archivo 600; página pública HTML 200. Adaptador y reglas en
+  deploy/heliohost; contratos y capas existentes se conservan.
+- Pendiente corregir credencial de MySQL con intervención del titular: el
+  navegador devolvió un marcador de ocultación que se guardó por error. API de
+  catálogo/categorías 503, código MySQL 1045. No se afirma conexión exitosa.
+- Log de conexión enviado a stderr con código numérico, sin detalles sensibles.
+
+
+## 2026-11-10 — Despliegue público verificado en Tommy2
+
+- URL: https://reginamolares.helioho.st/ con HTTPS válido y MariaDB del alojamiento.
+- Entrada CGI autorizada, usando CGIHandler para servir la misma aplicación
+  Flask. Configuración privada 600, script público 755 y reglas Apache 644.
+  La contraseña de base fue corregida manualmente por el titular y la conexión
+  real quedó verificada. No se publicaron contraseñas ni se cambiaron roles.
+- Se consumen cuerpos HTTP antes de llamar a Flask para evitar respuestas
+  incompletas de Apache al rechazar un POST de forma temprana (AH00574).
+- Pruebas públicas aprobadas: catálogo y nombre parcial, detalle 200/404,
+  categorías, estáticos, login válido/inválido, cookies seguras, gerente y
+  vendedor 403, administrador y depositero 201 con Location y stock cero,
+  logout 200 seguido de alta 401. Archivos privados no accesibles por HTTP.
+- Revisión en navegador: búsquedas con Enter y Buscar, mensaje vacío, Ver todos,
+  categorías y diseño. Dos productos de prueba conservados: IDs 31 y 32.
+- 40 pruebas locales aprobadas, sintaxis JavaScript y diff sin errores.
+- Trabajo en feature/rest-api, sin commit ni push. Tkinter y main se conservan.
+  Detalle operativo y decisiones en docs/despliegue-heliohost.md.

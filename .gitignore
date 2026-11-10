@@ -11,3 +11,6 @@ views/reportes_view.py_OLD.py
 
 .env
 .env.*
+
+.deploy-private/
+tecnostore-private/
