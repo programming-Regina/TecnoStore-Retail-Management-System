@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request, url_for, session, render_template, se
 from logic.auth import autenticar_usuario, consultar_rol_api
 from mysql.connector import Error, IntegrityError
 
-from logic.inventario import procesar_consulta_stock, consultar_producto_activo, gestionar_alta_producto
+from logic.inventario import procesar_consulta_stock, consultar_producto_activo, gestionar_alta_producto, consultar_categorias
 
 
 def create_app():
@@ -63,10 +63,20 @@ def create_app():
         return jsonify(mensaje="Sesión cerrada.")
 
 
+    @app.get("/api/categorias")
+    def listar_categorias():
+        try:
+            categorias = consultar_categorias()
+        except (ConnectionError, Error):
+            app.logger.exception("No se pudieron consultar las categorías")
+            return jsonify(error="No se pudieron consultar las categorías."), 503
+        return jsonify(categorias=[{campo: c[campo] for campo in
+                                   ("id_categoria", "categoria")} for c in categorias])
+
     @app.get("/api/productos")
     def listar_productos():
         try:
-            productos = procesar_consulta_stock(propagar_errores=True)
+            productos = procesar_consulta_stock(propagar_errores=True, nombre=request.args.get("nombre", "").strip())
         except (ConnectionError, Error):
             app.logger.exception("No se pudo consultar el catálogo")
             return jsonify(error="No se pudieron consultar los productos."), 503

@@ -30,6 +30,43 @@ class ProductosTest(unittest.TestCase):
         self.assertIn("ORDER BY descripcion", sql)
         conn.close.assert_called_once()
 
+    def test_busqueda_nombre_parametrizada_y_solo_activos(self):
+        conn = MagicMock()
+        conn.cursor.return_value.fetchall.return_value = [dict(
+            id_producto=2, descripcion="Mouse", marca="Tecno",
+            precio_venta=Decimal("100"), stock=4, precio_compra=Decimal("50"))]
+        with patch("db.connection.conectar_bd", return_value=conn):
+            r = self.client.get("/api/productos", query_string={"nombre": "  MoU  "})
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.json["productos"]), 1)
+        self.assertNotIn("precio_compra", r.json["productos"][0])
+        sql, params = conn.cursor.return_value.execute.call_args.args
+        self.assertIn("activo = 1", sql)
+        self.assertIn("LOCATE(LOWER(%s), LOWER(descripcion))", sql)
+        self.assertIn("ORDER BY descripcion", sql)
+        self.assertEqual(params, ("MoU",))
+        conn.close.assert_called_once()
+
+    def test_busqueda_sin_resultados_y_texto_literal(self):
+        for nombre in ("inexistente", "%_", "' OR 1=1 --"):
+            with self.subTest(nombre=nombre):
+                conn = MagicMock()
+                conn.cursor.return_value.fetchall.return_value = []
+                with patch("db.connection.conectar_bd", return_value=conn):
+                    r = self.client.get("/api/productos", query_string={"nombre": nombre})
+                self.assertEqual(r.status_code, 200)
+                self.assertEqual(r.json, {"productos": []})
+                self.assertEqual(conn.cursor.return_value.execute.call_args.args[1], (nombre,))
+
+    def test_nombre_vacio_lista_todos_y_error_busqueda(self):
+        conn = MagicMock()
+        conn.cursor.return_value.fetchall.return_value = []
+        with patch("db.connection.conectar_bd", return_value=conn):
+            self.assertEqual(self.client.get("/api/productos?nombre=%20").status_code, 200)
+        self.assertNotIn("LOCATE", conn.cursor.return_value.execute.call_args.args[0])
+        with patch("db.connection.conectar_bd", return_value=None):
+            self.assertEqual(self.client.get("/api/productos?nombre=mouse").status_code, 503)
+
     def test_catalogo_vacio(self):
         conn = MagicMock()
         conn.cursor.return_value.fetchall.return_value = []
@@ -265,6 +302,56 @@ class LoginTest(unittest.TestCase):
     def test_cookie_manipulada(self):
         self.client.set_cookie("session", "firma-invalida")
         self.assertEqual(self.client.post("/api/productos", json={}).status_code, 401)
+
+
+class CategoriasTest(unittest.TestCase):
+    def setUp(self):
+        self.client = create_app().test_client()
+        self.conn = MagicMock()
+
+    def test_listado_publico_solo_lectura(self):
+        self.conn.cursor.return_value.fetchall.return_value = [
+            dict(id_categoria=5, categoria="Periféricos", interno="privado")]
+        with patch("db.connection.conectar_bd", return_value=self.conn):
+            r = self.client.get("/api/categorias")
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.json, {"categorias": [dict(id_categoria=5, categoria="Periféricos")]})
+        self.conn.cursor.return_value.execute.assert_called_once_with(
+            "SELECT id_categoria, categoria FROM Categoria ORDER BY categoria")
+        self.conn.commit.assert_not_called()
+        self.conn.cursor.return_value.close.assert_called_once()
+        self.conn.close.assert_called_once()
+        self.assertEqual(self.client.post("/api/categorias", json={}).status_code, 405)
+
+    def test_vacio(self):
+        self.conn.cursor.return_value.fetchall.return_value = []
+        with patch("db.connection.conectar_bd", return_value=self.conn):
+            self.assertEqual(self.client.get("/api/categorias").json, {"categorias": []})
+
+    def test_sin_conexion_compatibilidad_escritorio(self):
+        from db.dao import obtener_categorias
+        with patch("db.connection.conectar_bd", return_value=None):
+            self.assertEqual(obtener_categorias(), [])
+            r = self.client.get("/api/categorias")
+        self.assertEqual(r.status_code, 503)
+        self.assertEqual(r.json, {"error": "No se pudieron consultar las categorías."})
+
+    def test_error_sql_y_creacion_cursor_cierra_recursos(self):
+        from mysql.connector import Error
+        for fallo_cursor in (False, True):
+            with self.subTest(fallo_cursor=fallo_cursor):
+                conn = MagicMock()
+                if fallo_cursor:
+                    conn.cursor.side_effect = Error("detalle privado")
+                else:
+                    conn.cursor.return_value.execute.side_effect = Error("detalle privado")
+                with patch("db.connection.conectar_bd", return_value=conn):
+                    r = self.client.get("/api/categorias")
+                self.assertEqual(r.status_code, 503)
+                self.assertNotIn("detalle privado", r.get_data(as_text=True))
+                conn.close.assert_called_once()
+                if not fallo_cursor:
+                    conn.cursor.return_value.close.assert_called_once()
 
 
 if __name__ == "__main__":

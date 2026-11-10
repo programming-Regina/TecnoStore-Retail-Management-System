@@ -288,3 +288,44 @@ Cambios locales en feature/rest-api, sin publicar ni desplegar.
 - La versión de escritorio sigue funcionando con Tkinter; no se cambiaron tablas ni relaciones.
 - Pendiente: actualizar README y diagramas conforme avance la API, y explicar la evolución gradual hacia clases y permisos centralizados.
 - Las pruebas se ejecutan con `python -m unittest discover -s tests -v`; **no requieren pytest**.
+
+
+### Categorías del formulario web
+
+- `GET /api/categorias`: consulta pública de solo lectura; responde `200` con
+  `{"categorias": [{"id_categoria": 5, "categoria": "Periféricos"}]}`.
+  Sin registros devuelve una lista vacía; ante fallos de conexión o SQL, `503`
+  con un mensaje genérico. Reutiliza el DAO de escritorio y ordena por nombre.
+- El alta muestra nombres y envía el ID numérico existente en el mismo contrato
+  de `POST /api/productos`. Incluye estados de carga, lista vacía y reintento;
+  evita el envío sin categoría disponible. No se modifican datos ni esquema.
+
+
+## 2026-11-10 — Búsqueda web por nombre y validación de categorías
+
+- Se reemplaza la consulta por ID de la pantalla por un campo de nombre parcial.
+  El formulario permite buscar con Enter o el botón Buscar. La tabla conserva
+  ID, descripción (nombre), marca, precio de venta y stock, y muestra todas las
+  coincidencias. Si no hay resultados, se informa explícitamente.
+- `GET /api/productos?nombre=texto` filtra productos activos por descripción,
+  sin distinguir mayúsculas de minúsculas, y los ordena por descripción.
+  Se recortan espacios exteriores; nombre ausente o vacío lista todos.
+  Conserva la respuesta `{"productos": [...]}` y los mismos campos públicos.
+- El filtro reutiliza API → lógica → DAO → MySQL. Usa LOCATE con LOWER y
+  parámetro SQL: `%` y `_` se buscan como caracteres literales. La búsqueda
+  de nombre/marca existente de Tkinter conserva su funcionamiento.
+- `GET /api/productos/{id}` y el contrato de `POST /api/productos` se conservan.
+  El desplegable de categorías mantiene nombres reales, ID numérico y estados
+  de carga, vacío, error y reintento. No cambia el esquema ni los datos.
+
+Validación local: 34 pruebas unittest aprobadas, sintaxis de JavaScript y
+`git diff --check` correctos. Con MySQL real se verificaron nombre parcial,
+igualdad de resultados en mayúsculas/minúsculas, ausencia de coincidencias,
+detalle por ID y las cinco categorías. Un entorno DOM simulado verificó submit
+de búsqueda, renderizado, mensaje vacío, Ver todos y el alta con categoría
+numérica; también categorías vacías/error sin envío. El POST de prueba utiliza
+respuestas simuladas: no se insertaron productos reales. No se hizo una revisión
+visual en navegador en esta segunda mejora.
+
+Cambios locales en `feature/rest-api`, pendientes de revisión; sin commit,
+push, modificación de main ni despliegue.

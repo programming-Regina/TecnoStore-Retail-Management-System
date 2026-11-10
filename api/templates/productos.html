@@ -16,8 +16,8 @@
       <section class="panel catalogo" aria-labelledby="catalogo-titulo">
         <h2 id="catalogo-titulo">Catálogo activo</h2>
         <form id="consulta" class="toolbar">
-          <label for="producto-id">ID de producto<input id="producto-id" type="number" min="1" max="2147483647" step="1" required placeholder="Ej. 14"></label>
-          <button type="submit">Consultar</button>
+          <label for="producto-nombre">Nombre del producto<input id="producto-nombre" type="search" placeholder="Ej. mouse"></label>
+          <button type="submit">Buscar</button>
           <button type="button" id="ver-todos" class="secondary">Ver todos</button>
         </form>
         <p id="catalogo-estado" role="status" aria-live="polite"></p>
@@ -44,8 +44,10 @@
               <label for="precio_compra">Precio de compra<input id="precio_compra" name="precio_compra" type="number" min="0.01" max="99999999.99" step="0.01" required></label>
               <label for="precio_venta">Precio de venta<input id="precio_venta" name="precio_venta" type="number" min="0.01" max="99999999.99" step="0.01" required></label>
             </div>
-            <label for="id_categoria">ID de categoría<input id="id_categoria" name="id_categoria" type="number" min="1" max="2147483647" step="1" aria-describedby="categoria-ayuda" required></label>
-            <p class="help" id="categoria-ayuda">Ingresá el ID de una categoría existente. La venta debe superar al precio de compra. El stock inicial será 0.</p>
+            <label for="id_categoria">Categoría<select id="id_categoria" name="id_categoria" aria-describedby="categoria-estado categoria-ayuda" required disabled><option value="">Cargando categorías…</option></select></label>
+            <p id="categoria-estado" role="status" aria-live="polite"></p>
+            <button type="button" id="reintentar-categorias" class="secondary" hidden>Reintentar categorías</button>
+            <p class="help" id="categoria-ayuda">Seleccioná una categoría. La venta debe superar al precio de compra. El stock inicial será 0.</p>
             <button type="submit">Registrar producto</button>
           </form>
           <p id="alta-estado" role="status" aria-live="polite"></p>

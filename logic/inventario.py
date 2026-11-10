@@ -105,7 +105,7 @@ def gestionar_alta_producto(desc, marca, costo_txt, venta_txt, cat_txt, *, retor
 # =============================================================================
 # CONSULTA GENERAL DE STOCK
 # =============================================================================
-def procesar_consulta_stock(termino_busqueda=None, *, propagar_errores=False):
+def procesar_consulta_stock(termino_busqueda=None, *, propagar_errores=False, nombre=None):
     """
     PROPÓSITO: Puente lógico para que el vendedor consulte el stock y precio.
                Filtra por nombre si hay un término, o trae todo el catálogo activo.
@@ -119,7 +119,7 @@ def procesar_consulta_stock(termino_busqueda=None, *, propagar_errores=False):
     if termino_busqueda:
         return buscar_productos_por_nombre(termino_busqueda)
     else:
-        return obtener_productos_activos_ordenados(propagar_errores=propagar_errores)
+        return obtener_productos_activos_ordenados(propagar_errores=propagar_errores, nombre=nombre)
 
 
 def consultar_producto_activo(id_producto):
@@ -132,3 +132,9 @@ def consultar_producto_activo(id_producto):
     if producto is None or not producto["activo"]:
         return None
     return producto
+
+
+def consultar_categorias():
+    """Categorías disponibles para el alta web; informa errores de datos."""
+    from db.dao import obtener_categorias
+    return obtener_categorias(propagar_errores=True)

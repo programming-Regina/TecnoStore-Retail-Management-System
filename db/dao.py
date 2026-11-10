@@ -412,7 +412,7 @@ def dar_alta_logica_producto(id_producto):
 # =============================================================================
 # LISTA DE PRODUCTOS EN VENTA ORDENADOS POR NOMBRE
 # =============================================================================
-def obtener_productos_activos_ordenados(*, propagar_errores=False):
+def obtener_productos_activos_ordenados(*, propagar_errores=False, nombre=None):
     """Lista activos; la API puede solicitar errores en lugar de una lista vacía."""
     from db.connection import conectar_bd
     conexion = conectar_bd()
@@ -423,7 +423,12 @@ def obtener_productos_activos_ordenados(*, propagar_errores=False):
     cursor = None
     try:
         cursor = conexion.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM Producto WHERE activo = 1 ORDER BY descripcion")
+        if nombre:
+            cursor.execute("""SELECT * FROM Producto
+                WHERE activo = 1 AND LOCATE(LOWER(%s), LOWER(descripcion)) > 0
+                ORDER BY descripcion""", (nombre,))
+        else:
+            cursor.execute("SELECT * FROM Producto WHERE activo = 1 ORDER BY descripcion")
         return cursor.fetchall()
     except Exception as e:
         if propagar_errores:
@@ -496,19 +501,26 @@ def insertar_producto(descripcion, marca, precio_compra, precio_venta, id_catego
 # =============================================================================
 # MUESTRA CATEGORIAS (PARA EL LISTADO DE ALTA DE PRODUCTO)
 # =============================================================================
-def obtener_categorias():
+def obtener_categorias(*, propagar_errores=False):
     from db.connection import conectar_bd
     conexion = conectar_bd()
-    if not conexion: return []
-    cursor = conexion.cursor(dictionary=True)
+    if not conexion:
+        if propagar_errores:
+            raise ConnectionError("No se pudo conectar a la base de datos.")
+        return []
+    cursor = None
     try:
+        cursor = conexion.cursor(dictionary=True)
         cursor.execute("SELECT id_categoria, categoria FROM Categoria ORDER BY categoria")
         return cursor.fetchall()
     except Exception as e:
+        if propagar_errores:
+            raise
         print(f"Error al traer categorías: {e}")
         return []
     finally:
-        cursor.close()
+        if cursor is not None:
+            cursor.close()
         conexion.close()
 
 

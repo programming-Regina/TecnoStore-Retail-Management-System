@@ -65,6 +65,8 @@ Se está diseñando una interfaz HTTP para ampliar las formas de integración de
 | Método | Ruta | Operación |
 | --- | --- | --- |
 | `GET` | `/api/productos` | Implementado: listar productos activos |
+| `GET` | `/api/productos?nombre=texto` | Implementado: buscar activos por nombre parcial sin distinguir mayúsculas |
+| `GET` | `/api/categorias` | Implementado: listar categorías para el alta (solo lectura) |
 | `GET` | `/api/productos/{id}` | Implementado: consultar un producto activo por ID |
 | `POST` | `/api/productos` | Implementado: registrar un producto |
 
@@ -226,13 +228,14 @@ Detener Flask con Ctrl+C.
 
 Para probar la demo:
 
-1. Ver el listado y consultar un ID de la tabla. Probar también uno inexistente.
+1. Ver el listado y buscar parte de un nombre, con Enter o Buscar. Probar
+   mayúsculas/minúsculas y un texto sin coincidencias.
    “Ver todos” vuelve al catálogo completo.
 2. Iniciar sesión con un usuario existente de rol administrador o depositero.
    Usa los mismos usuarios de la aplicación de escritorio y la sesión HTTP existente.
-3. Completar el alta con una categoría existente (consultar su ID en la tabla
-   `categoria` de MySQL), precios positivos y venta mayor a compra. No se agrega
-   una ruta de categorías. El alta guarda un producto real con stock 0 y muestra
+3. Completar el alta seleccionando una categoría del desplegable, cargado desde
+   MySQL mediante `GET /api/categorias` (solo lectura y sin sesión), con precios
+   positivos y venta mayor a compra. El alta guarda un producto real con stock 0 y muestra
    su ID; el catálogo se actualiza después.
 4. Cerrar sesión. Las consultas siguen disponibles; registrar sin sesión muestra
    el mensaje de la API. Si la sesión vence, volver a iniciar sesión.
@@ -271,7 +274,7 @@ Confirmar que el proveedor acepta todos esos rangos sin habilitar cualquier host
 si no lo permite, detenerse y revisar alternativas sin contratar extras.
 Usar datos y usuarios ficticios, con contraseñas de aplicación exclusivas para
 la demo. El usuario MySQL de ejecución solo necesita SELECT sobre Usuario y Rol,
-SELECT e INSERT sobre Producto; usar un usuario separado con esos permisos si
+SELECT sobre Categoria y SELECT e INSERT sobre Producto; usar un usuario separado con esos permisos si
 el panel lo permite. No compartir el usuario de importación públicamente.
 
 Validar desde la URL HTTPS: pantalla y logo, listado, consulta por ID, ID inexistente,
