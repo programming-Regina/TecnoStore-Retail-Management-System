@@ -18,7 +18,11 @@ async function request(url, data) {
   let result;
   try { result = await response.json(); }
   catch { throw new Error("El servidor devolvió una respuesta inesperada. Volvé a intentar."); }
-  if (!response.ok) throw new Error(result.error || "No se pudo completar la operación.");
+  if (!response.ok) {
+    const error = new Error(result.error || "No se pudo completar la operación.");
+    error.status = response.status;
+    throw error;
+  }
   return result;
 }
 function busy(form, value) {
@@ -38,19 +42,30 @@ function render(products) {
     $("productos").append(row);
   }
 }
-async function loadProducts(nombre = "") {
-  nombre = nombre.trim();
+async function loadProducts(text = "", mode = "nombre") {
+  text = text.trim();
+  const byId = mode === "id";
+  if (byId && (!/^[0-9]+$/.test(text) || Number(text) < 1 || Number(text) > 2147483647)) {
+    message("catalogo-estado", "Ingresá un ID entero entre 1 y 2147483647.", "error");
+    return false;
+  }
   busy($("consulta"), true);
   render([]);
   message("catalogo-estado", "Consultando productos…");
   try {
-    const result = await request(nombre ? `/api/productos?nombre=${encodeURIComponent(nombre)}` : "/api/productos");
-    const products = result.productos;
+    const url = byId ? `/api/productos/${Number(text)}` :
+      (text ? `/api/productos?nombre=${encodeURIComponent(text)}` : "/api/productos");
+    const result = await request(url);
+    const products = byId ? [result.producto] : result.productos;
     render(products);
-    message("catalogo-estado", products.length ? (nombre ? `${products.length} coincidencias.` : `${products.length} productos activos.`) : (nombre ? "No se encontraron productos con ese nombre." : "No hay productos activos."));
+    message("catalogo-estado", byId ? "Producto encontrado." : (products.length ? (text ? `${products.length} coincidencias.` : `${products.length} productos activos.`) : (text ? "No se encontraron productos con ese nombre." : "No hay productos activos.")));
     return true;
   } catch (error) {
-    message("catalogo-estado", error.message, "error");
+    if (byId && error.status === 404) {
+      message("catalogo-estado", "No se encontró un producto con ese ID.");
+    } else {
+      message("catalogo-estado", error.message, "error");
+    }
     return false;
   } finally { busy($("consulta"), false); }
 }
@@ -76,12 +91,28 @@ async function loadCategories() {
   }
 }
 $("reintentar-categorias").addEventListener("click", loadCategories);
+function changeSearchMode() {
+  const input = $("producto-busqueda");
+  const byId = $("modo-id").checked;
+  input.value = "";
+  input.type = byId ? "number" : "search";
+  input.required = byId;
+  input.placeholder = byId ? "Ej. 14" : "Ej. mouse";
+  for (const [attribute, value] of [["min", "1"], ["max", "2147483647"], ["step", "1"]]) {
+    if (byId) input.setAttribute(attribute, value);
+    else input.removeAttribute(attribute);
+  }
+  $("busqueda-etiqueta").textContent = byId ? "ID del producto" : "Nombre del producto";
+  input.focus();
+}
+$("modo-nombre").addEventListener("change", changeSearchMode);
+$("modo-id").addEventListener("change", changeSearchMode);
 $("consulta").addEventListener("submit", (event) => {
   event.preventDefault();
-  loadProducts($("producto-nombre").value);
+  loadProducts($("producto-busqueda").value, $("modo-id").checked ? "id" : "nombre");
 });
 $("ver-todos").addEventListener("click", () => {
-  $("producto-nombre").value = "";
+  $("producto-busqueda").value = "";
   loadProducts();
 });
 $("login").addEventListener("submit", async (event) => {
@@ -139,7 +170,7 @@ $("alta").addEventListener("submit", async (event) => {
     message("alta-estado", `${result.mensaje} ID asignado: ${result.id_producto}.`, "success");
     // No repetir el alta si la actualización del catálogo falla.
     if (!$("ver-todos").disabled) {
-      $("producto-nombre").value = "";
+      $("producto-busqueda").value = "";
       await loadProducts();
     }
   } catch (error) { message("alta-estado", error.message, "error"); }

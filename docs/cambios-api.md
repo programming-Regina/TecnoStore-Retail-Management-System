@@ -396,3 +396,22 @@ push, modificación de main ni despliegue.
 - 40 pruebas locales aprobadas, sintaxis JavaScript y diff sin errores.
 - Trabajo en feature/rest-api, sin commit ni push. Tkinter y main se conservan.
   Detalle operativo y decisiones en docs/despliegue-heliohost.md.
+
+
+## 2026-11-10 — Selector de búsqueda por nombre o ID
+
+- La web permite elegir Buscar por nombre (predeterminado) o Buscar por ID.
+  Cambiar de modo limpia y enfoca el campo, ajusta su etiqueta y validación,
+  y conserva la tabla hasta ejecutar una nueva consulta.
+- Nombre reutiliza GET /api/productos?nombre=texto; ID reutiliza el detalle
+  GET /api/productos/{id}, sin cambios de backend ni contratos. ID admite
+  enteros positivos hasta 2147483647 y tiene un mensaje específico para 404.
+- Buscar y Enter ejecutan el formulario. Ver todos limpia el campo y recupera
+  el catálogo completo independientemente del modo. Se conserva el desplegable
+  de categorías y el comportamiento de las altas.
+- Cambio local para revisión, sin commit, push ni actualización del alojamiento.
+- Verificación: 40 pruebas locales aprobadas, sintaxis JavaScript y diff sin
+  errores. Simulación DOM: cambio de modo limpia y enfoca sin tocar resultados;
+  consulta por nombre y detalle por ID, mensaje 404, rechazo de ID vacío/cero/
+  negativo/fraccionario/fuera de rango y Ver todos desde modo ID. Categorías
+  siguen cargando. Los contratos HTTP se verifican con la suite existente.

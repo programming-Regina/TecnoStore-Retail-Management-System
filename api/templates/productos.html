@@ -16,7 +16,12 @@
       <section class="panel catalogo" aria-labelledby="catalogo-titulo">
         <h2 id="catalogo-titulo">Catálogo activo</h2>
         <form id="consulta" class="toolbar">
-          <label for="producto-nombre">Nombre del producto<input id="producto-nombre" type="search" placeholder="Ej. mouse"></label>
+          <fieldset class="search-modes">
+            <legend class="sr-only">Buscar productos por</legend>
+            <label><input id="modo-nombre" type="radio" name="modo-busqueda" value="nombre" checked> Buscar por nombre</label>
+            <label><input id="modo-id" type="radio" name="modo-busqueda" value="id"> Buscar por ID</label>
+          </fieldset>
+          <label for="producto-busqueda" class="search-field"><span id="busqueda-etiqueta">Nombre del producto</span><input id="producto-busqueda" type="search" placeholder="Ej. mouse"></label>
           <button type="submit">Buscar</button>
           <button type="button" id="ver-todos" class="secondary">Ver todos</button>
         </form>

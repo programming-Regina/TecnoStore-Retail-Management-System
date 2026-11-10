@@ -21,7 +21,11 @@ button.secondary:hover { background: #F0F5F9; }
 button:disabled { opacity: .6; cursor: wait; }
 :focus-visible { outline: 3px solid #435D74; outline-offset: 3px; }
 .toolbar { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
-.toolbar label { margin: 0; max-width: 160px; }
+.toolbar label { margin: 0; }
+.search-modes { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 10px 18px; border: 0; padding: 0; margin: 0 0 4px; min-width: 0; }
+.search-modes label { display: inline-flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer; }
+.search-modes input { width: auto; margin: 0; accent-color: #0E2A47; }
+.toolbar .search-field { flex: 1 1 220px; }
 .precios { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .help, [role="status"] { font-size: 14px; color: #435D74; }
 [role="status"] { min-height: 21px; overflow-wrap: anywhere; }
@@ -35,4 +39,4 @@ th:nth-last-child(-n+2), td:nth-last-child(-n+2) { text-align: right; white-spac
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 [hidden] { display: none !important; }
 @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } aside { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } }
-@media (max-width: 600px) { aside { display: block; } .panel { padding: 16px; } .toolbar label { max-width: none; width: 100%; } }
+@media (max-width: 600px) { aside { display: block; } .panel { padding: 16px; } .toolbar .search-field { flex-basis: 100%; } }
