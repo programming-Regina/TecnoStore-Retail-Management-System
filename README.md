@@ -6,7 +6,7 @@ Tecno Store es un sistema de gestión comercial y punto de venta para un comerci
   <img src="images/Captura webapi 1.PNG" alt="Pantalla principal de la demo web Tecno Store" width="720">
 </p>
 <p align="center">
-  <img src="images/Captura webapi 2.PNG" alt="Pantalla principal de la demo web Tecno Store" width="720">
+  <img src="images/Captura webapi 2.PNG" alt="Pantalla principal de la demo web Tecno Store" width="320">
 </p>
 
 ## Aplicación de escritorio
