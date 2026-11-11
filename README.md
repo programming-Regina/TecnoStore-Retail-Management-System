@@ -3,7 +3,10 @@
 Tecno Store es un sistema de gestión comercial y punto de venta para un comercio minorista de tecnología. Nació como proyecto académico de Programación y Bases de Datos. En Práctica Profesional III se incorporaron una API REST con Flask y una interfaz web para demostrar la evolución del módulo de productos.
 
 <p align="center">
-  <img src="images/captura.jpeg" alt="Pantalla principal de Tecno Store en Tkinter" width="720">
+  <img src="images/Captura webapi 1.PNG" alt="Pantalla principal de la demo web Tecno Store" width="720">
+</p>
+<p align="center">
+  <img src="images/Captura webapi 2.PNG" alt="Pantalla principal de la demo web Tecno Store" width="720">
 </p>
 
 ## Aplicación de escritorio
