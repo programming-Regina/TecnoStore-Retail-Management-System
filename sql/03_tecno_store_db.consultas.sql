@@ -11,7 +11,6 @@ CONSULTAS BÁSICAS
 /* 1. Listar todos los productos activos ordenados por precio de venta
 Tipo: Básica
 Roles: Admin, Vendedor, Depositero
-Coder: Fernanda
 */
 
 SELECT id_producto, id_categoria, descripcion, marca, precio_compra, precio_venta, stock
@@ -22,7 +21,6 @@ ORDER BY precio_venta ASC;
 /* 2. Listar usuarios por rol
 Tipo: Básica
 Roles: Admin
-Coder: Fernanda
 */
 
 SELECT id_usuario, apellido, nombre, id_rol, activo
@@ -33,7 +31,6 @@ WHERE id_rol = 3;
 /* 3. Productos con stock por debajo del mínimo
 Tipo: Básica
 Roles: Admin, Depositero
-Coder: Fernanda
 */
 
 SELECT * FROM VW_StockCritico;
@@ -44,7 +41,6 @@ SELECT * FROM VW_StockCritico;
 /* 4. Listar todos los proveedores activos
 Tipo: Básica
 Roles: Admin, Depositero
-Coder: Fernanda
 */
 
 SELECT id_proveedor, razon_social, telefono
@@ -54,7 +50,6 @@ WHERE activo = 1;
 /* 5. Buscar producto por descripción (LIKE)
 Tipo: Básica
 Roles: Admin, Vendedor, Depositero
-Coder: Fernanda
 */
 
 SELECT id_producto, id_categoria, descripcion, marca, precio_venta, stock
@@ -68,7 +63,6 @@ CONSULTAS JOIN
 /* 6. Ventas con nombre del vendedor que las registró
 Tipo: JOIN
 Roles: Admin, Gerente
-Coder: Cristian
 */
 
 SELECT 
@@ -82,7 +76,6 @@ INNER JOIN Usuario u ON v.id_usuario = u.id_usuario;
 /* 7. Detalle de venta con descripción y precio de cada producto
 Tipo: JOIN
 Roles: Admin, Vendedor
-Coder: Cristian
 */
 
 SELECT 
@@ -98,7 +91,6 @@ INNER JOIN Producto p ON dv.id_producto = p.id_producto;
 /* 8. Compras con nombre del proveedor
 Tipo: JOIN
 Roles: Admin, Depositero
-Coder: Cristian
 */
 
 SELECT 
@@ -113,7 +105,6 @@ INNER JOIN Proveedor prov ON c.id_proveedor = prov.id_proveedor;
 Historial de ventas
 Tipo: JOIN
 Roles: Admin
-Coder: Regina
 */
 
 SELECT
@@ -138,7 +129,6 @@ ORDER BY v.fecha DESC;
 /* 10. Productos que nunca fueron comprados a ningún proveedor
 Tipo: LEFT JOIN + NULL
 Roles: Admin, Depositero
-Coder: Cristian
 */
 
 SELECT
@@ -157,7 +147,6 @@ CONSULTAS GROUP BY / HAVING
 /* 11. Total vendido por mes
 Tipo: GROUP BY
 Roles: Admin, Gerente
-Coder: Regina
 */
 
 SELECT
@@ -171,7 +160,6 @@ ORDER BY mes ASC;
 /* 12. Costos del mes (mercadería comprada)
 Tipo: GROUP BY
 Roles: Admin, Gerente
-Coder: Regina
 */
 
 SELECT
@@ -185,7 +173,6 @@ ORDER BY mes ASC;
 /* 13. Margen bruto (ventas - costos)
 Tipo: GROUP BY
 Roles: Admin, Gerente
-Coder: Regina
 */
 
 SELECT
@@ -205,7 +192,6 @@ para cada mes y, a partir de esos resultados temporales,
 obtener el producto más vendido de cada período sin repetir 
 lógica en la consulta.
 Roles: Admin, Gerente
-Coder: Regina
 */
 
 WITH VentasPorMes AS (
@@ -233,7 +219,6 @@ JOIN MaximoPorMes mpm ON vpm.mes = mpm.mes AND vpm.total_vendido = mpm.max_canti
 /* 15. Categoría más vendida
 Tipo: GROUP BY
 Roles: Admin, Gerente
-Coder: Cristian
 */
 
 SELECT 
@@ -250,7 +235,6 @@ LIMIT 1;
 /* 16. Cantidad de ventas por mes
 Tipo: GROUP BY
 Roles: Admin, Gerente
-Coder: Regina
 */
 
 SELECT
@@ -263,7 +247,6 @@ ORDER BY mes ASC;
 /* 17. Ticket promedio general
 Tipo: GROUP BY
 Roles: Admin, Gerente
-Coder: Regina
 */
 
 SELECT
@@ -277,7 +260,6 @@ GROUP BY id_venta
 /* 18. Categorías con más de N productos activos
 Tipo: GROUP BY + HAVING
 Roles: Admin, Depositero
-Coder: Regina
 */
 
 SELECT
@@ -292,7 +274,6 @@ HAVING COUNT(p.id_producto) > 5;
 /* 19. Vendedores con ticket promedio superior a un monto
 Tipo: GROUP BY + HAVING
 Roles: Admin, Gerente
-Coder: Regina
 */
 
 SELECT
@@ -316,7 +297,6 @@ HAVING ticket_promedio > 50000.00;
 Dejamos N=1 porque tenemos poquitas compras
 Tipo: GROUP BY + HAVING
 Roles: Admin, Depositero
-Coder: Regina
 */
 
 SELECT
@@ -334,7 +314,6 @@ SUBCONSULTAS OBLIGATORIAS
 /* 21. Producto con el mayor stock actual
 Tipo: Subconsulta escalar
 Roles: Admin, Depositero
-Coder: Regina
 */
 
 SELECT
@@ -348,7 +327,6 @@ WHERE stock = (SELECT MAX(stock) FROM Producto);
 /* 22. Productos vendidos en ventas pagadas con crédito
 Tipo: Subconsulta IN
 Roles: Admin, Gerente
-Coder: Cristian
 */
 
 SELECT p.id_producto, p.descripcion, p.marca
@@ -365,7 +343,6 @@ WHERE fp.forma_pago = 'Tarjeta de Crédito'
 /* 23. Vendedores que tienen al menos una venta registrada
 Tipo: Subconsulta EXISTS
 Roles: Admin, Gerente
-Coder: Cristian
 */
 
 SELECT 
@@ -383,7 +360,6 @@ WHERE EXISTS (
 /* 24. Productos cuyo precio supera el promedio de su categoría
 Tipo: Subconsulta correlacionada
 Roles: Admin, Gerente, Vendedor
-Coder: Regina
 */
 
 SELECT

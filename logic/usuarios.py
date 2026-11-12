@@ -4,7 +4,6 @@ PROYECTO: Tecno Store - Sistema de Gestión y Punto de Venta
 MÓDULO: usuarios.py
 CAPA: Lógica de Negocio (Controlador / Servicios)
 DESCRIPCIÓN: ABM de usuarios
-CODER: Regina
 ===============================================================================
 """
 

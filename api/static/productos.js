@@ -5,6 +5,7 @@ function message(id, text, type = "") {
   $(id).textContent = text;
   $(id).className = type;
 }
+// fetch envía la petición HTTP. Si hay datos, los convertimos a JSON para el POST.
 async function request(url, data) {
   let response;
   try {
@@ -18,6 +19,7 @@ async function request(url, data) {
   let result;
   try { result = await response.json(); }
   catch { throw new Error("El servidor devolvió una respuesta inesperada. Volvé a intentar."); }
+  // El estado HTTP indica si la operación tuvo éxito. El JSON aporta el detalle.
   if (!response.ok) {
     const error = new Error(result.error || "No se pudo completar la operación.");
     error.status = response.status;
@@ -123,6 +125,7 @@ $("login").addEventListener("submit", async (event) => {
     const result = await request("/api/login", { username: $("username").value, clave: $("clave").value });
     $("login").hidden = true;
     $("logout").hidden = false;
+    // El rol orienta el mensaje de la pantalla. Flask verifica el permiso en cada alta.
     const allowed = ["administrador", "depositero"].includes(result.usuario.rol);
     message("sesion-estado", `${result.usuario.nombre} · ${result.usuario.rol}. ${allowed ? "Podés registrar productos." : "Tu rol no tiene permiso para registrar productos."}`, allowed ? "success" : "error");
   } catch (error) {
@@ -149,6 +152,7 @@ $("alta").addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = event.currentTarget;
   const data = Object.fromEntries(new FormData(form));
+  // La revisión en el formulario da una respuesta inmediata. El servidor valida los datos recibidos.
   if (!data.descripcion.trim() || !data.marca.trim()) {
     message("alta-estado", "Completá la descripción y la marca.", "error");
     return;
@@ -168,7 +172,7 @@ $("alta").addEventListener("submit", async (event) => {
     const result = await request("/api/productos", data);
     form.reset();
     message("alta-estado", `${result.mensaje} ID asignado: ${result.id_producto}.`, "success");
-    // No repetir el alta si la actualización del catálogo falla.
+    // El alta ya se confirmó. La consulta posterior solo actualiza el catálogo de la pantalla.
     if (!$("ver-todos").disabled) {
       $("producto-busqueda").value = "";
       await loadProducts();

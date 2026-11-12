@@ -4,8 +4,12 @@ PROYECTO: Tecno Store - Sistema de Gestión y Punto de Venta
 MÓDULO: inventario_view.py
 CAPA: Vista (views)
 DESCRIPCIÓN:
-Pantallas relacionadas con inventario y productos.
-CODER: Regina
+Pantallas de inventario del escritorio.
+
+Para consultar el catálogo y registrar productos, Tkinter llama a la lógica
+de inventario desde sus eventos. La vista muestra el resultado en una tabla
+o en un mensaje. En la versión web, Flask llama a esas mismas funciones y
+el navegador presenta los datos que recibe en JSON.
 ===============================================================================
 """
 
@@ -109,7 +113,6 @@ def mostrar_consulta_stock(frame):
     """
     PROPÓSITO: Interfaz gráfica para que el vendedor consulte rápidamente 
                el producto, su precio de venta y el stock físico disponible.
-    CODER: Regina
     PARÁMETROS:
         :param frame: (tk.Frame) El contenedor central de la aplicación.
     """
@@ -186,7 +189,6 @@ def mostrar_consulta_stock(frame):
 def mostrar_productos(frame):
     """
     PROPÓSITO: Pantalla ABM para el catálogo de productos.
-    CODER: Regina / Jennifer
     """
     limpiar_frame(frame)
     frame.config(bg=COLOR_FONDO)
@@ -310,7 +312,6 @@ def mostrar_productos(frame):
 def mostrar_productos_inactivos(frame):
     """
     PROPÓSITO: Pantalla de productos fuera de la venta (0) o activos (1)
-    CODER: Regina
     """   
     
     limpiar_frame(frame)

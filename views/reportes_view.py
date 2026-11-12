@@ -6,7 +6,6 @@ CAPA: Vista (views)
 DESCRIPCIÓN:
 Pantallas relacionadas con reportes y análisis.
 Estas vistas serán utilizadas principalmente por Administrador y Gerente.
-CODER: Regina
 ===============================================================================
 """
 
@@ -144,7 +143,6 @@ def mostrar_ranking_productos(frame):
 def mostrar_formas_pago(frame):
     """
     PROPÓSITO: ventas agrupadas por forma de pago.
-    CODER: Regina
     """
     limpiar_frame(frame)
     crear_titulo(frame, "Ventas por Forma de Pago")

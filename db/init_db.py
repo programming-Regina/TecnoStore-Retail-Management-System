@@ -5,7 +5,6 @@ CAPA: Acceso a Datos / Infraestructura
 DESCRIPCIÓN: Script de inicialización automática (Migración). 
              Garantiza que la base de datos, tablas y rutinas existan 
              antes de que la interfaz gráfica intente consumirlas.
-CODER: Regina
 """
 import mysql.connector
 

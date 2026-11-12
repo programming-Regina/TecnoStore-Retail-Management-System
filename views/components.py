@@ -6,7 +6,6 @@ CAPA: Vista (views)
 DESCRIPCIÓN:
 Componentes reutilizables para toda la interfaz gráfica.
 La idea es evitar repetir código en cada pantalla.
-CODER ZERO: Regina
 ===============================================================================
 """
 
@@ -22,7 +21,6 @@ def validar_entrada_numerica(valor):
     PROPÓSITO: Valida si una entrada de texto o valor crudo puede ser convertida a un tipo flotante.
                Evita caídas de interfaz ante caracteres inválidos.
 
-    CODER: Fernanda.
 
     PARÁMETROS:  
         :valor: (any) El dato ingresado por el usuario en el componente gráfico (Entry).

@@ -1,4 +1,9 @@
-"""Contrato HTTP y compatibilidad de la consulta, sin modificar MySQL."""
+"""Pruebas de la API desde el punto de vista de un cliente HTTP.
+
+El cliente de prueba de Flask permite revisar estados HTTP y respuestas
+JSON. Las operaciones de datos se simulan para ejecutar las pruebas sin
+una base MySQL activa.
+"""
 import unittest
 from decimal import Decimal
 from unittest.mock import MagicMock, patch

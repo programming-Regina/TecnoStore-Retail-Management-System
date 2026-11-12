@@ -1,13 +1,8 @@
-"""
-===============================================================================
-PROYECTO: Tecno Store - Sistema de Gestión y Punto de Venta
-MÓDULO: auth.py
-CAPA: Lógica de Negocio (Controlador / Servicios)
-DESCRIPCIÓN:
-Gestiona la autenticación de usuarios, validación de credenciales, control
-de sesiones y verificación de permisos según el rol asignado y estado.
-CODER: Regina
-===============================================================================
+"""Reglas de autenticación compartidas por Tkinter y Flask.
+
+Ambas interfaces comprueban las credenciales y el estado del usuario con
+la misma función. Tkinter guarda el identificador en el proceso de
+escritorio. Flask registra el nombre de usuario en su propia sesión web.
 """
 
 from db.dao import obtener_usuario_por_username
@@ -18,22 +13,12 @@ USUARIO_ID = None
 # VALIDA ACCESO
 # =============================================================================
 def autenticar_usuario(username_ingresado, clave_ingresada, *, sesion_escritorio=True):
+    """Comprueba las credenciales y devuelve los datos del usuario o un error.
+
+    El nombre de usuario se arma con el nombre y el apellido. Si la cuenta
+    está activa y la clave coincide, se devuelve también el rol normalizado.
     """
-    PROPÓSITO: valida credenciales usando username compuesto.
-
-    CODER: Regina.
-
-    PARÁMETROS:  
-    	:username_ingresado: (str) Nombre y apellido     	
-        :clave_ingresada: (str) Nombre y apellido    
-
-    RETORNO: 
-    	:success: (bool), True si login exitoso
-        :nombre: (str),  nombre y apellido
-        :rol: (str), en minúsculas. 
-
-    """
-    # Elimina espacios
+    # Normalizamos el nombre de usuario para compararlo con el que busca el DAO.
     username_limpio = username_ingresado.strip().replace(" ", "")
     
     usuario = (obtener_usuario_por_username(username_limpio) if sesion_escritorio else
@@ -69,12 +54,12 @@ def autenticar_usuario(username_ingresado, clave_ingresada, *, sesion_escritorio
         "success": True,
         "nombre": f"{usuario['nombre']} {usuario['apellido']}",
         "rol": rol_final,
-        "username": usuario['nombre'] + usuario['apellido'] # para uso interno (no sacar)
+        "username": usuario['nombre'] + usuario['apellido'] # Nombre de usuario que se devuelve a la interfaz.
     }
 
 
 def consultar_rol_api(username):
-    """Revalida el estado y rol actual sin usar la sesión global de Tkinter."""
+    """Consulta si la cuenta sigue activa y qué rol tiene al momento del alta web."""
     usuario = obtener_usuario_por_username(username, propagar_errores=True)
     if not usuario or not usuario["activo"]:
         return None

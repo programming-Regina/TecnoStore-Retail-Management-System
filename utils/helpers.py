@@ -6,7 +6,6 @@ CAPA: Utilidades / Soporte (Utils)
 DESCRIPCIÓN:
 Funciones auxiliares y genéricas del sistema (formateo de fechas, strings, 
 monedas y validaciones básicas de datos de entrada).
-CODER: Jennifer
 ===============================================================================
 """
 
@@ -15,7 +14,6 @@ def calcular_iva(subtotal):
     PROPÓSITO: Calcula el monto correspondiente al Impuesto al Valor Agregado (21%) 
                sobre un monto base.
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :subtotal: (float) Monto base sobre el cual calcular el impuesto.
@@ -33,7 +31,6 @@ def formatear_moneda(monto):
     PROPÓSITO: Convierte un valor numérico a un formato de texto amigable para la vista,
                simulando el formato moneda local (ej: $ 25.000,00).
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :monto: (float/int) El valor numérico crudo.

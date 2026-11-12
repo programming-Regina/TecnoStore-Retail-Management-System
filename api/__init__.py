@@ -1,4 +1,16 @@
-"""Entrada HTTP independiente de la interfaz Tkinter."""
+"""Servidor web de Tecno Store.
+
+El navegador solicita la página y, desde allí, consulta o modifica datos
+mediante peticiones HTTP a Flask. GET consulta productos y POST envía
+datos para iniciar sesión o registrar un producto. JSON es el formato con
+el que el cliente y el servidor intercambian esos datos.
+
+El recorrido es navegador → Flask → lógica → DAO → MySQL. Flask traduce
+la petición en una llamada a Python y devuelve el resultado como JSON con
+un estado HTTP. El escritorio llama a la lógica desde Tkinter en el mismo
+proceso. Compartir las reglas y las consultas evita duplicar el trabajo y
+permite ofrecer las mismas operaciones a otros clientes HTTP.
+"""
 import os
 import secrets
 from datetime import timedelta
@@ -55,6 +67,7 @@ def create_app():
             return jsonify(error="No se pudo iniciar sesión."), 503
         if "error" in resultado:
             return jsonify(error="Credenciales inválidas o usuario inhabilitado."), 401
+        # La sesión web identifica al usuario en las siguientes peticiones.
         session["username"] = datos["username"].strip().replace(" ", "")
         session.permanent = True
         return jsonify(usuario={c: resultado[c] for c in ("nombre", "rol", "username")})
@@ -83,7 +96,7 @@ def create_app():
             app.logger.exception("No se pudo consultar el catálogo")
             return jsonify(error="No se pudieron consultar los productos."), 503
 
-        # Contrato público: OJO... no exponer precio de compra ni columnas internas.
+        # El catálogo público expone solo los campos necesarios para la consulta.
         campos = ("id_producto", "descripcion", "marca", "precio_venta", "stock")
         return jsonify(productos=[{campo: p[campo] for campo in campos} for p in productos])
 
@@ -101,6 +114,7 @@ def create_app():
 
     @app.post("/api/productos")
     def crear_producto():
+        # La sesión indica quién hace el pedido. El rol vigente define si puede dar de alta.
         if "username" not in session:
             return jsonify(error="Iniciá sesión para registrar productos."), 401
         try:
@@ -111,8 +125,10 @@ def create_app():
         if rol is None:
             session.clear()
             return jsonify(error="La sesión ya no es válida."), 401
+        # Solo administración y depósito pueden dar de alta productos por la API.
         if rol not in {"administrador", "depositero"}:
             return jsonify(error="No tenés permiso para registrar productos."), 403
+        # Flask verifica el formato y los campos. La lógica valida las reglas del alta.
         if not request.is_json:
             return jsonify(error="Se requiere Content-Type application/json."), 415
         datos = request.get_json(silent=True)
@@ -136,6 +152,7 @@ def create_app():
             app.logger.exception("No se pudo registrar el producto")
             return jsonify(error="No se pudo registrar el producto."), 503
         respuesta = jsonify(id_producto=id_producto, mensaje="Producto registrado. Stock inicial: 0.")
+        # El estado 201 confirma el alta y Location indica cómo consultar el producto.
         respuesta.status_code = 201
         respuesta.headers["Location"] = url_for("obtener_producto", id_producto=id_producto)
         return respuesta

@@ -3,7 +3,6 @@
    VW_StockCritico
    3. Productos activos con stock menor a 5 unidades
    Roles: Admin, Depositero
-   Coder: Fernanda
    ========================================================================= */
 
 CREATE OR REPLACE VIEW VW_StockCritico AS
@@ -25,7 +24,6 @@ WHERE stock < 5
    11. Costos del mes (mercadería comprada)
    Redundante, pero conservada por compatibilidad y motivos afectivos
    Roles: Admin, Gerente
-   Coder: Regina
    ========================================================================= */
 
 CREATE OR REPLACE VIEW VW_CostosMensuales AS
@@ -42,7 +40,6 @@ ORDER BY mes ASC;
    VW_RendimientosMensuales
    12. Margen bruto (ventas - costos)
    Roles: Admin, Gerente
-   Coder: Regina
    ========================================================================= */
 
 CREATE OR REPLACE VIEW VW_RendimientosMensuales AS
@@ -62,7 +59,6 @@ ORDER BY mes ASC;
    VW_ProductoMasVendidoPorMes
    13. Producto más vendido por mes
    Roles: Admin, Gerente
-   Coder: Regina
    ========================================================================= */
 
 CREATE OR REPLACE VIEW VW_ProductoMasVendidoPorMes AS

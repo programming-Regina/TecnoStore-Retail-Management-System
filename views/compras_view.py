@@ -9,7 +9,6 @@ Pantallas relacionadas con compras y proveedores.
 Estas vistas serán utilizadas principalmente por:
 - Administrador
 - Depositero
-CODER: Regina
 ===============================================================================
 """
 
@@ -63,7 +62,7 @@ def mostrar_registrar_compra(frame, id_usuario_logueado=1):
             tree_resultados.delete(row)
             
         for prod in resultados:
-            # REGLA DE NEGOCIO (Regina): No estimamos el precio de costo. A manito nomás se mete
+            # La persona que registra la compra ingresa el costo de forma manual.
             tree_resultados.insert("", tk.END, text=prod['id_producto'], 
                                    values=(prod['descripcion'], prod['marca'], "-", prod['stock']))
 

@@ -1,13 +1,8 @@
-"""
-===============================================================================
-PROYECTO: Tecno Store - Sistema de Gestión y Punto de Venta
-MÓDULO: inventario.py
-CAPA: Lógica de Negocio (Controlador / Servicios)
-DESCRIPCIÓN:
-Administra las reglas de negocio del inventario: alta/baja lógica de productos,
-actualización de stock físico y control de alertas para stock crítico.
-CODER ZERO: Regina
-===============================================================================
+"""Reglas de inventario compartidas por el escritorio y la API.
+
+Tkinter y Flask llaman a esta capa para consultar el catálogo o dar de
+alta un producto. Aquí se validan los datos y se decide qué operación
+pedirle al DAO, que se encarga de consultar o escribir en MySQL.
 """
 
 from db.dao import dar_baja_logica_producto, insertar_producto, obtener_productos_activos_ordenados, buscar_productos_por_nombre,dar_alta_logica_producto
@@ -39,7 +34,6 @@ def gestionar_baja_logica(id_producto):
 def gestionar_reactivacion_producto(id_producto):
     """
     PROPÓSITO: Puente lógico para volver a comercializar un artículo retirado.
-    CODER: Regina
     PARÁMETROS:
         :param id_producto: (int) ID del producto a reactivar.
     RETORNO:
@@ -60,9 +54,11 @@ def gestionar_reactivacion_producto(id_producto):
 # ALTA DE NUEVO PRODUCTO 
 # =============================================================================
 def gestionar_alta_producto(desc, marca, costo_txt, venta_txt, cat_txt, *, retornar_id=False):
-    """Valida el alta; conserva (éxito, mensaje) para la interfaz de escritorio.
+    """Aplica las mismas reglas de alta a los datos de ambas interfaces.
 
-    La API solicita retornar_id: recibe el ID o una excepción de validación/datos.
+    Por ejemplo, el precio de venta debe superar al costo. El escritorio
+    recibe un resultado y un mensaje para mostrar. La API pide el ID del
+    producto creado y traduce los errores en respuestas HTTP.
     """
     from decimal import Decimal, InvalidOperation
 
@@ -107,14 +103,11 @@ def gestionar_alta_producto(desc, marca, costo_txt, venta_txt, cat_txt, *, retor
 # =============================================================================
 def procesar_consulta_stock(termino_busqueda=None, *, propagar_errores=False, nombre=None):
     """
-    PROPÓSITO: Puente lógico para que el vendedor consulte el stock y precio.
-               Filtra por nombre si hay un término, o trae todo el catálogo activo.
-    CODER: Regina
-    PARÁMETROS:
-        :param termino_busqueda: (str) Opcional. Palabra clave a buscar.
-        :param propagar_errores: (bool) En listado sin filtro, informa fallos a la API.
-    RETORNO:
-        :return: (list) Lista de diccionarios con los productos encontrados.
+    Pide al DAO el catálogo activo o los productos que coinciden con el nombre.
+
+    Al pedir el catálogo completo, Flask solicita que se le informen los
+    fallos de la base de datos. Así distingue un catálogo vacío de una
+    consulta que no pudo completarse.
     """
     if termino_busqueda:
         return buscar_productos_por_nombre(termino_busqueda)

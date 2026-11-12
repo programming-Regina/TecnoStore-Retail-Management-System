@@ -8,7 +8,6 @@ Pantallas relacionadas con la administración de usuarios.
 
 Estas vistas serán utilizadas exclusivamente por:
 - Administrador
-CODER: Regina
 ===============================================================================
 """
 
@@ -62,7 +61,7 @@ def mostrar_gestion_usuarios(frame):
     entry_clave.grid(row=3, column=1, padx=10, pady=5) 
 
     tk.Label(panel_izquierdo, text="Rol / Perfil:", bg=COLOR_FONDO).grid(row=4, column=0, sticky="w", padx=10, pady=5)
-    # Lista hardcodeada para no hacer otra tabla puente a esta hora
+    # La vista presenta una lista fija de roles.
     opciones_roles = ["1 - Administrador", "2 - Gerente", "3 - Depositero", "4 - Vendedor"]
     combo_rol = ttk.Combobox(panel_izquierdo, values=opciones_roles, state="readonly", width=22)
     combo_rol.grid(row=4, column=1, padx=10, pady=5)

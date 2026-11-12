@@ -6,7 +6,6 @@ CAPA: Lógica de Negocio (Controlador / Servicios)
 DESCRIPCIÓN:
 Controla el flujo transaccional del punto de venta: registro de operaciones, 
 cálculo de totales, desglose de detalles y afectación directa al stock.
-CODER ZERO: Regina
 ===============================================================================
 """
 from db.connection import conectar_bd
@@ -21,7 +20,6 @@ def registrar_venta_transaccion(id_forma_pago, USUARIO_ID, carrito):
     PROPÓSITO: Controla el flujo atómico transaccional de una venta al público. Almacena 
                la cabecera en BD, itera los detalles y asegura el comportamiento ACID global.
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :id_forma_pago: (int) ID del método de pago seleccionado por el cliente.
@@ -87,7 +85,6 @@ def calcular_subtotal_memoria(carrito):
     PROPÓSITO: Recorre la lista temporal del carrito y calcula el monto total a cobrar 
                multiplicando cantidades por precios unitarios.
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :carrito: (list) Lista de diccionarios de la transacción actual.
@@ -109,7 +106,6 @@ def anular_venta_transaccion(id_venta):
     PROPÓSITO: Revierte una venta iterando los detalles para sortear el Safe Update 
                de MySQL. Restaura el stock y elimina registros (Detalle y Cabecera).
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :id_venta: (int) El identificador único de la factura a anular.

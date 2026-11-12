@@ -8,7 +8,6 @@ Contiene las interfaces gráficas y controladores de eventos para el Punto de
 Venta (POS), Historial de Facturación, Anulaciones y Auditoría Diaria.
 Alineado con el estándar transaccional y validación de doble capa.
 
-CODER: Regina
 ===============================================================================
 """
 
@@ -28,7 +27,6 @@ def mostrar_nueva_venta(frame):
     PROPÓSITO: Renderiza el Punto de Venta (POS). Maneja el ciclo de búsqueda de productos, 
                armado del carrito en memoria y envío de la transacción a la base de datos.
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :frame: (tk.Frame) El contenedor principal donde se dibujará la pantalla.        
@@ -161,7 +159,6 @@ def mostrar_nueva_venta(frame):
         else:
             messagebox.showerror("Error", "Ocurrió un problema en la transacción. Operación abortada.")
 
-        # print(auth.USUARIO_ID) ----> GRRRRR... ACÁ ESTABA EL MALDITO 
 
     # =========================================================================
     # MAQUETACIÓN 
@@ -309,7 +306,7 @@ def mostrar_historial_ventas(frame):
             # Generamos el ticket reutilizando la utilidad existente
             texto_ticket = generar_ticket(detalles, total_final, vendedor_nombre=vendedor_nombre, id_venta=id_venta)
             
-            # Popup visual (reciclaje!)
+            # Reutilizamos la ventana que muestra el ticket.
             ventana_ticket = tk.Toplevel()
             ventana_ticket.title(f"Comprobante - Factura N° {id_venta}")
             ventana_ticket.geometry("380x520")

@@ -1,13 +1,9 @@
-"""
-===============================================================================
-PROYECTO: Tecno Store - Sistema de Gestión y Punto de Venta
-MÓDULO: dao.py
-CAPA: Acceso a Datos / Persistencia (Data Access Object)
-DESCRIPCIÓN:
-Encapsula el acceso a la base de datos mediante el patrón DAO. Contiene 
-las consultas SQL y transacciones puras para independizar la lógica de negocio.
-CODER ZERO: Regina
-===============================================================================
+"""Acceso a datos de Tecno Store.
+
+El DAO reúne las consultas SQL y las operaciones de escritura en MySQL.
+La lógica puede pedir una operación de inventario con la misma llamada
+desde ambos recorridos, aunque el resultado se muestre en Tkinter o se
+devuelva al navegador como JSON.
 """
 
 from db.connection import conectar_bd
@@ -35,7 +31,6 @@ def obtener_usuario_por_username(username_ingresado, *, propagar_errores=False):
     """
     PROPÓSITO: genera el username con nombre y apellido y compara con la BD.
 
-    CODER: Regina.
 
     PARÁMETROS:  
     	:username: (str) Nombre y apellido     	
@@ -74,7 +69,6 @@ def insertar_usuario(datos):
     """
     PROPÓSITO: inserta nuevo usuario.
 
-    CODER: Fernanda.
 
     PARÁMETROS:  
     	:datos: (list): apellido, nombre, clave, id_rol
@@ -121,7 +115,6 @@ def obtener_producto_por_id(id):
     PROPÓSITO: Consulta en la base de datos un producto específico mediante su ID unívoco 
                y mapea las columnas relacionales.
 
-    CODER: Fernanda.
 
     PARÁMETROS:  
         :id: (int) Identificador único del producto en la tabla Producto.
@@ -153,7 +146,6 @@ def listar_proveedores_activos():
     PROPÓSITO: Recupera el catálogo completo de proveedores comerciales vigentes (con alta lógica).
                Utilizado para alimentar dinámicamente Comboboxes de la interfaz.
 
-    CODER: Fernanda.
 
     PARÁMETROS:  
         Ninguno.
@@ -184,7 +176,6 @@ def buscar_productos_por_nombre(termino):
     PROPÓSITO: Busca productos activos en el catálogo cuyo nombre o marca coincidan 
                parcialmente con el término de búsqueda ingresado.
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :termino: (str) Palabra o fragmento a buscar.
@@ -222,7 +213,6 @@ def obtener_venta_completa(id_venta):
     PROPÓSITO: Recupera de forma relacional la cabecera (datos generales) y el 
                detalle (artículos comprados) de una venta específica para su auditoría.
 
-    CODER: Regina.
 
     PARÁMETROS:  
         :id_venta: (int) Identificador único de la venta a buscar.
@@ -277,7 +267,6 @@ def registrar_compra_transaccion(id_proveedor, lista_productos):
     """
     PROPÓSITO: Registra una compra a proveedor. Inserta cabecera y detalles.
                El trigger de la BD actualiza el stock automáticamente.
-    CODER: Fernanda / Regina.
 
     Lógica de compras para manejar los cambios de precios: 
     Usamos el modelo de 'Costo de Reposición' onda negocios de retail. 
@@ -330,7 +319,6 @@ def obtener_productos_stock_critico():
     """
     PROPÓSITO: Recupera el listado de productos en estado crítico desde 
     la vista SQL VW_StockCritico.
-    CODER: Regina.
     """   
     conexion = conectar_bd()
     if not conexion:
@@ -354,7 +342,6 @@ def obtener_productos_stock_critico():
 def dar_baja_logica_producto(id_producto):
     """
     PROPÓSITO: Cambia el estado del producto a inactivo.
-    CODER: Regina
     """
     from db.connection import conectar_bd
     conexion = conectar_bd()
@@ -383,7 +370,6 @@ def dar_baja_logica_producto(id_producto):
 def dar_alta_logica_producto(id_producto):
     """
     PROPÓSITO: Cambia el estado del producto a activo (1) para volver a comercializarlo.
-    CODER: Regina
     PARÁMETROS:
         :param id_producto: (int) El identificador único del producto.
     RETORNO:
@@ -413,7 +399,11 @@ def dar_alta_logica_producto(id_producto):
 # LISTA DE PRODUCTOS EN VENTA ORDENADOS POR NOMBRE
 # =============================================================================
 def obtener_productos_activos_ordenados(*, propagar_errores=False, nombre=None):
-    """Lista activos; la API puede solicitar errores en lugar de una lista vacía."""
+    """Lee el catálogo activo ordenado por descripción, con filtro opcional por nombre.
+
+    La API pide que se propaguen los errores de conexión para responder
+    con un estado HTTP de servicio no disponible.
+    """
     from db.connection import conectar_bd
     conexion = conectar_bd()
     if not conexion:
@@ -447,7 +437,6 @@ def obtener_productos_activos_ordenados(*, propagar_errores=False, nombre=None):
 def obtener_productos_inactivos():
     """
     PROPÓSITO: Recupera el listado de productos retirados de la venta (activo = 0).
-    CODER: Fernanda
     """
     from db.connection import conectar_bd
     conexion = conectar_bd()
@@ -706,7 +695,7 @@ def obtener_historial_ventas():
         
     try:
         cursor = conexion.cursor(dictionary=True)
-        # Usamos los nombres exactos de tus tablas: Venta, Usuario y DetalleVenta
+        # La consulta combina la venta, el vendedor y los importes de sus artículos.
         query = """
             SELECT 
                 v.id_venta, 

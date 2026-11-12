@@ -12,7 +12,6 @@ Contiene:
 - Área central de contenido
 
 Todas las pantallas se cargan dentro del frame de contenido.
-CODER: Regina
 ===============================================================================
 """
 
@@ -30,9 +29,11 @@ from logic.auth import USUARIO_ID
 
 
 # =============================================================================
-# QUÉ ROL TIENE ACCESO A QUÉ FUNCIONES
+# OPCIONES DE ESCRITORIO DISPONIBLES SEGÚN EL ROL
 # =============================================================================
 
+# El rol define qué opciones muestra Tkinter. En la web, Flask revisa el
+# permiso de alta al recibir la petición.
 MENU_ROLES = {
 
     "administrador": {
@@ -58,7 +59,7 @@ MENU_ROLES = {
         ],
         "Administración": [
             ("Gestión de usuarios", mostrar_gestion_usuarios)#,  
-            #("Auditoría SQL Avanzada", mostrar_consultas_avanzadas)  # NO WAY- NO llegamos
+            #("Auditoría SQL Avanzada", mostrar_consultas_avanzadas)
         ]
     },
 
@@ -83,7 +84,7 @@ MENU_ROLES = {
             #("Consultas permitidas", mostrar_consultas_avanzadas)
         ],
         "Reportes": [
-            ("Mis ventas por mes", mostrar_mis_ventas) # este quería comer id_usuario
+            ("Mis ventas por mes", mostrar_mis_ventas) # Usa el identificador del vendedor de la sesión.
         ]
     },
 

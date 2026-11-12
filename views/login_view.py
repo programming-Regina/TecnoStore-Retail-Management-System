@@ -1,24 +1,8 @@
-"""
-===============================================================================
-PROYECTO: Tecno Store - Sistema de Gestión y Punto de Venta
-MÓDULO: login_view.py
-CAPA: Vista (views)
-DESCRIPCIÓN:
-Pantalla de inicio de sesión.
+"""Pantalla de ingreso de Tkinter.
 
-Usuarios de demostración:
-
-    admin       / admin123
-    vendedor    / vendedor123
-    depositero  / depositero123
-    gerente     / gerente123
-
-Por ahora no consulta la base de datos.
-La autenticación está simulada para facilitar el desarrollo.
-Una vez que todo funcione, volar la hardcodeada y la lógica de login pasarla
-a logic/auth.py
-CODER: Regina
-===============================================================================
+La vista toma el usuario y la clave del formulario y llama directamente
+a la lógica de autenticación. Esa misma función verifica los datos cuando
+Flask recibe un inicio de sesión por HTTP.
 """
 
 import tkinter as tk

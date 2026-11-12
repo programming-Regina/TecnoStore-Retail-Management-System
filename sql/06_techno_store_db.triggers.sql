@@ -1,7 +1,6 @@
 -- /sql/06_tecno_store_db.triggers.sql
 /* ============================================================================
    Trigger 1 - Evitar vender más stock del disponible   
-   Coder: Regina
    ========================================================================= */
 
 DELIMITER $$
@@ -29,7 +28,6 @@ DELIMITER ;
 
 /* ============================================================================
    Trigger 2 - Descontar stock automáticamente al vender
-   Coder: Regina
    ========================================================================= */
 
    DELIMITER $$
@@ -49,7 +47,6 @@ DELIMITER ;
 
 /* ============================================================================
    Trigger 3 - Reponer stock automáticamente al registrar compras
-   Coder: Regina
    ========================================================================= */
 
 DELIMITER $$

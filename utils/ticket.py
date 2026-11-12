@@ -6,7 +6,6 @@ CAPA: Utilidades / Soporte (Utils)
 DESCRIPCIÓN:
 Estructura y genera el formato de impresión para los comprobantes de venta 
 (tickets) en base a los datos de la transacción.
-CODER: Jennifer
 ===============================================================================
 """
 
@@ -18,7 +17,6 @@ def generar_ticket(carrito, total, vendedor_nombre="Vendedor", id_venta="N/A"):
     PROPÓSITO: Genera una cadena de texto (ASCII Art) que simula un comprobante 
     para ser mostrado en pantalla o enviado a una impresora térmica.
 
-    CODER: Jennifer.
 
     PARÁMETROS:  
         :carrito: (list) Lista de diccionarios con los productos de la transacción.

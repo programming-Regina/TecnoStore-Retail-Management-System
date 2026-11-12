@@ -6,7 +6,6 @@ CAPA: Lógica de Negocio (Controlador / Servicios)
 DESCRIPCIÓN:
 Procesa los datos analíticos del sistema. Consume vistas SQL (como rendimientos 
 mensuales y rankings) para estructurar la información requerida por la interfaz.
-CODER ZERO: Regina
 ===============================================================================
 """
 
@@ -71,7 +70,6 @@ def procesar_rendimientos_mensuales():
 def procesar_ventas_por_forma_pago():
     """
     PROPÓSITO: Puente lógico para el reporte de ventas por forma de pago.
-    CODER: Regina
     """
     datos = obtener_ventas_por_forma_pago()
     return datos if datos else []

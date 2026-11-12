@@ -10,7 +10,6 @@ Estas vistas serán utilizadas principalmente por:
 - Gerente
 - Vendedor
 - Depositero
-CODER: Regina
 ===============================================================================
 """
 import tkinter as tk
@@ -130,7 +129,7 @@ def obtener_consultas_por_rol(rol):
 
 
 # =============================================================================
-# DEFINE LAS CONSULTAS AVANZADAS (PROVISORIO) -> (ABORTADO por falta de tiempo) 
+# PANTALLA DE DEMOSTRACIÓN DE CONSULTAS AVANZADAS
 # =============================================================================
 def mostrar_consultas_avanzadas(frame):
     """
