@@ -1,24 +1,21 @@
 """
 ===============================================================================
 PROYECTO IFTS16: Tecno Store - Sistema de Gestión y Punto de Venta
-AUTORES:epe
-    - Duszynski, Cristian    | Rol: Infraestructura, SQL, QA, Testing y Documentación   p
-    - Jurado, María Fernanda | Rol: Frontend (Tkinter), SQL, QA, Testing y Documentación
-    - Molares, Regina Noemí  | Rol: Arquitectura, DBA, Backend Core, Git, Gobernanza IA
-    - Moyano, Jennifer       | Rol: QA, Testing y Documentación
-FECHA:    Junio 2026
+FECHA:    Noviembre 2026
 VERSIÓN:  1.0
 PYTHON:   3.x
     
 ASIGNATURAS y DOCENTES:
 - Técnicas de Programación | DOCENTE:  Ingrid García
 - Administración y Gestión de Base de Datos | DOCENTE: Lic. Gustavo Escandell
+- Modelado y Diseño de Software | DOCENTE: Cristian M. Mendez
+- PP3: Diseño y Arquitectura de Sistemas | DOCENTE: Leandro Binetti  
 
 OBSERVACIÓN:
-    Este trabajo práctico se presenta de manera conjunta para ambas asignaturas, 
+    Este trabajo práctico se presenta de manera conjunta para varias asignaturas, 
     contando con la previa autorización de sus respectivos docentes. 
     El desarrollo ha sido concebido bajo un enfoque transversal, con el objetivo 
-    de demostrar la integración convergente de los saberes de ambas disciplinas 
+    de demostrar la integración convergente de los saberes de todas las disciplinas 
     en una solución de software, donde los conceptos teóricos y prácticos 
     de cada materia se potencian mutuamente.
 -------------------------------------------------------------------------------
