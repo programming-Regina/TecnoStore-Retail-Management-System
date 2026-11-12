@@ -34,6 +34,50 @@ La pantalla permite buscar productos activos por **nombre parcial o ID**. Cambia
 
 La evolución se desarrolla en la rama `feature/rest-api`. El [registro de cambios](docs/cambios-api.md) detalla los contratos y las pruebas. La [guía de despliegue](docs/despliegue-heliohost.md) documenta el alojamiento y la verificación pública.
 
+## Estructura del proyecto
+
+La evolución web se agregó sin reemplazar la aplicación de escritorio. Ambas interfaces reutilizan la lógica de negocio y el acceso a datos.
+
+```text
+TecnoStore-Retail-Management-System/
+├── api/                    # API Flask y cliente web de demostración
+│   ├── __init__.py         # Rutas HTTP, sesiones y respuestas JSON
+│   ├── static/             # Recursos estáticos de la web
+│   └── templates/          # Plantillas HTML
+├── views/                  # Interfaz de escritorio Tkinter
+├── logic/                  # Reglas de negocio compartidas
+│   ├── auth.py             # Autenticación
+│   ├── inventario.py       # Productos, stock y categorías
+│   ├── usuarios.py
+│   ├── ventas.py
+│   └── reportes.py
+├── db/                     # Acceso y conexión a la base de datos
+│   ├── connection.py
+│   ├── dao.py
+│   └── init_db.py
+├── sql/                    # Estructura, carga y rutinas SQL
+├── tests/                  # Pruebas automatizadas
+│   ├── test_api.py
+│   └── test_hosting.py
+├── docs/                   # Cambios de API y despliegue
+│   ├── cambios-api.md
+│   └── despliegue-heliohost.md
+├── deploy/                 # Archivos para el alojamiento
+│   └── heliohost/
+├── assets/                 # Recursos gráficos del proyecto
+├── images/                 # Capturas e imágenes de documentación
+├── utils/                  # Funciones auxiliares y tickets
+├── main.py                 # Entrada de la aplicación de escritorio
+├── hosting.py              # Entrada/adaptación para alojamiento
+├── requirements.txt        # Dependencias del proyecto original
+└── requirements-api.txt    # Dependencias de la API
+```
+
+**Flujo de escritorio:** Tkinter (`views/`) → `logic/` → `db/dao.py` → MySQL/MariaDB.  
+**Flujo web:** navegador → Flask (`api/`) → `logic/` → `db/dao.py` → MySQL/MariaDB.
+
+Este árbol resume las carpetas y archivos relevantes para PP3; no enumera todos los recursos del repositorio.
+
 ## Ejecución local
 
 Usá Python y un servidor MySQL local. Para una instalación de prueba, creá y seleccioná una base vacía llamada `tecno_store_db` e importá los scripts `01` y `02` de [sql/](sql/). El script `01` recrea tablas. La conexión local se configura en [db/connection.py](db/connection.py).
